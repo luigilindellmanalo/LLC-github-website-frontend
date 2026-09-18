@@ -356,7 +356,7 @@
         return;
       }
 
-      if (user) {
+            if (user) {
         clearErrors();
         window.LLCBootstrap.enterApp(user)
           .then(function () { hideGate(); })
@@ -374,11 +374,25 @@
         return;
       }
 
-      /* Signed out. */
-      if (window.LLCApp && window.LLCApp.hideApp) window.LLCApp.hideApp();
-      if (window.ChatService && window.ChatService.reset) window.ChatService.reset();
-      showGate();
-      goToStep("choice");
+      /* Signed out = public visitor.
+         The site itself is browsable without an account. The auth modal
+         remains available for clients/staff who choose to sign in. */
+      window.LLCBootstrap.enterApp(null)
+        .then(function () {
+          hideGate();
+          if (window.ChatService && window.ChatService.reset) {
+            window.ChatService.reset();
+          }
+        })
+        .catch(function (error) {
+          showGate();
+          goToStep("choice");
+          showError(
+            "choice-error",
+            "We couldn't load the site content. Please try again in a moment."
+          );
+          if (window.console) console.error(error);
+        });
     });
   }
 
