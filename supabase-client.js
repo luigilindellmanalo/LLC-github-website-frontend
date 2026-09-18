@@ -21,7 +21,7 @@
 
   /* ---------- CONFIGURE THESE TWO VALUES ---------- */
   var SUPABASE_URL = "https://YOUR-PROJECT-REF.supabase.co";
-  var SUPABASE_ANON_KEY = "YOUR-ANON-KEY-HERE";
+  var SUPABASE_ANON_KEY = "sb_publishable_n-E4TbfGKVQ5h7RDjEnwDQ_SJk5L_Ew";
   /* ------------------------------------------------ */
 
   var EDGE = SUPABASE_URL + "/functions/v1/";
