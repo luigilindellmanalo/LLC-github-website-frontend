@@ -8,41 +8,48 @@
    app.js line 13 is:   const DATA = window.SITE_DATA;
    captured at parse time. Keeping the shape identical means
    buildGalleryPanel, renderNav, the photo lightbox, the business-hours
-   logic and the back-button router all keep working untouched. The
-   alternative would have been rewriting the rendering engine, which is
-   the part of Phase 1-9 most worth keeping.
+   logic and the back-button router all keep working untouched.
 
    WHAT CHANGES INSIDE THE SHAPE
-     - photo.image     -> the DISPLAY copy  (~500 KB, not the HD original)
-     - photo.thumbnail -> the 600px grid copy (~60 KB)
+     - photo.image     -> the DISPLAY copy
+     - photo.thumbnail -> the 600px grid copy
      - photo.original  -> the untouched HD original, never auto-fetched
      - sampleProjects / sampleItems come back EMPTY (D12)
 
    The HD original is preserved and never compressed (D17). It is
    simply not what the browser reaches for while someone scrolls.
 
-   ⚠️ Content queries require an authenticated session. Everything is
-   behind the login gate (D2) and anonymous users have no read policy
-   at all, so this must run AFTER sign-in.
+   Content queries require an authenticated session. Everything is
+   behind the login gate (D2).
    ===================================================================== */
 (function () {
   "use strict";
 
   var sb = window.LLCSupabase;
-  var signer = window.LLCSignedUrls;
-  if (!sb || !signer) {
-    console.error("supabase-client.js and signed-urls.js must load first");
+
+  if (!sb || !sb.client) {
+    console.error("supabase-client.js must load first");
     return;
   }
+
   var client = sb.client;
 
-  var DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday",
-                   "Thursday", "Friday", "Saturday"];
+  var DAY_NAMES = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ];
 
   /* app.js matches business hours against English day names produced by
      Intl.DateTimeFormat. The database stores 0-6 because the string
      comparison is locale-fragile, so it is converted back here. */
-  function dayName(n) { return DAY_NAMES[n] || "Sunday"; }
+  function dayName(n) {
+    return DAY_NAMES[n] || "Sunday";
+  }
 
   function hhmm(t) {
     if (!t) return null;
@@ -60,15 +67,70 @@
   };
 
   function emptyGalleryBlock() {
-    return { categories: [], projects: [], sampleProjects: [] };
+    return {
+      categories: [],
+      projects: [],
+      sampleProjects: []
+    };
+  }
+
+  /* -------------------------------------------------------------------
+     SIGNED STORAGE URLS
+
+     signed-urls.js is no longer used. The Supabase client already has
+     authenticated access to Storage, so signing is performed directly
+     through client.storage.createSignedUrls().
+
+     The result is converted into the same lookup shape the old signer
+     returned:
+       {
+         "path/to/file.jpg": "https://...signed-url..."
+       }
+     ------------------------------------------------------------------- */
+  function signMany(bucket, paths) {
+    var unique = [];
+
+    (paths || []).forEach(function (path) {
+      if (path && unique.indexOf(path) === -1) {
+        unique.push(path);
+      }
+    });
+
+    if (!unique.length) {
+      return Promise.resolve({});
+    }
+
+    return client.storage
+      .from(bucket)
+      .createSignedUrls(unique, 3600)
+      .then(function (res) {
+        if (res.error) throw res.error;
+
+        var map = {};
+
+        (res.data || []).forEach(function (item) {
+          if (item && item.path && item.signedUrl) {
+            map[item.path] = item.signedUrl;
+          }
+        });
+
+        return map;
+      });
   }
 
   function load() {
     var data = {
       company: {},
       nav: [],
-      reviews: { recommendPercent: 100, items: [], sampleItems: [] },
-      videoTestimonials: { items: [], sampleItems: [] },
+      reviews: {
+        recommendPercent: 100,
+        items: [],
+        sampleItems: []
+      },
+      videoTestimonials: {
+        items: [],
+        sampleItems: []
+      },
       completedProjectPhotos: emptyGalleryBlock(),
       completedProjectVideos: emptyGalleryBlock(),
       groundBreaking: emptyGalleryBlock(),
@@ -79,13 +141,37 @@
     return Promise.all([
       client.from("company_profile").select("*").maybeSingle(),
       client.from("business_hours").select("*").order("day_of_week"),
-      client.from("client_nav_items").select("*").eq("visible", true).order("sort_order"),
-      client.from("reviews").select("*").eq("published", true).order("sort_order"),
-      client.from("testimonial_videos").select("*").eq("published", true).order("sort_order"),
+      client
+        .from("client_nav_items")
+        .select("*")
+        .eq("visible", true)
+        .order("sort_order"),
+      client
+        .from("reviews")
+        .select("*")
+        .eq("published", true)
+        .order("sort_order"),
+      client
+        .from("testimonial_videos")
+        .select("*")
+        .eq("published", true)
+        .order("sort_order"),
       client.from("gallery_sections").select("*").order("sort_order"),
-      client.from("gallery_categories").select("*").eq("published", true).order("sort_order"),
-      client.from("gallery_projects").select("*").eq("published", true).order("sort_order"),
-      client.from("gallery_media").select("*").eq("published", true).order("sort_order")
+      client
+        .from("gallery_categories")
+        .select("*")
+        .eq("published", true)
+        .order("sort_order"),
+      client
+        .from("gallery_projects")
+        .select("*")
+        .eq("published", true)
+        .order("sort_order"),
+      client
+        .from("gallery_media")
+        .select("*")
+        .eq("published", true)
+        .order("sort_order")
     ]).then(function (r) {
       var company = r[0].data || {};
       var hours = r[1].data || [];
@@ -100,32 +186,62 @@
       /* ---------- Collect every storage path, then sign in batches
                     rather than one request per image. ---------- */
       var galleryPaths = [];
+
       media.forEach(function (m) {
-        if (m.thumbnail_path) galleryPaths.push(m.thumbnail_path);
-        if (m.display_path) galleryPaths.push(m.display_path);
+        if (m.thumbnail_path) {
+          galleryPaths.push(m.thumbnail_path);
+        }
+
+        if (m.display_path) {
+          galleryPaths.push(m.display_path);
+        }
+
         /* The HD original is deliberately NOT signed here. It is only
            fetched if something explicitly asks for it. */
-        if (m.media_type === "video" && m.storage_path) galleryPaths.push(m.storage_path);
-      });
-      categories.forEach(function (c) {
-        if (c.cover_image_path) galleryPaths.push(c.cover_image_path);
+        if (m.media_type === "video" && m.storage_path) {
+          galleryPaths.push(m.storage_path);
+        }
       });
 
-      var companyPaths = [company.cover_image_path, company.profile_image_path].filter(Boolean);
-      var reviewPaths = reviews.map(function (x) { return x.customer_photo_path; }).filter(Boolean);
+      categories.forEach(function (c) {
+        if (c.cover_image_path) {
+          galleryPaths.push(c.cover_image_path);
+        }
+      });
+
+      var companyPaths = [
+        company.cover_image_path,
+        company.profile_image_path
+      ].filter(Boolean);
+
+      var reviewPaths = reviews
+        .map(function (x) {
+          return x.customer_photo_path;
+        })
+        .filter(Boolean);
+
       var testimonialPaths = [];
+
       testimonials.forEach(function (t) {
-        if (t.video_path) testimonialPaths.push(t.video_path);
-        if (t.thumbnail_path) testimonialPaths.push(t.thumbnail_path);
+        if (t.video_path) {
+          testimonialPaths.push(t.video_path);
+        }
+
+        if (t.thumbnail_path) {
+          testimonialPaths.push(t.thumbnail_path);
+        }
       });
 
       return Promise.all([
-        signer.getMany("gallery-media", galleryPaths),
-        signer.getMany("company-assets", companyPaths),
-        signer.getMany("review-photos", reviewPaths),
-        signer.getMany("testimonial-videos", testimonialPaths)
+        signMany("gallery-media", galleryPaths),
+        signMany("company-assets", companyPaths),
+        signMany("review-photos", reviewPaths),
+        signMany("testimonial-videos", testimonialPaths)
       ]).then(function (signed) {
-        var g = signed[0], co = signed[1], rp = signed[2], tv = signed[3];
+        var g = signed[0];
+        var co = signed[1];
+        var rp = signed[2];
+        var tv = signed[3];
 
         /* ---------- company ---------- */
         data.company = {
@@ -150,13 +266,21 @@
 
         /* ---------- nav ---------- */
         data.nav = nav.map(function (n) {
-          return { id: n.nav_key, label: n.label, icon: n.icon, status: n.status };
+          return {
+            id: n.nav_key,
+            label: n.label,
+            icon: n.icon,
+            status: n.status
+          };
         });
 
         /* ---------- reviews ---------- */
         data.reviews = {
-          recommendPercent: company.recommend_percent != null
-            ? company.recommend_percent : 100,
+          recommendPercent:
+            company.recommend_percent != null
+              ? company.recommend_percent
+              : 100,
+
           items: reviews.map(function (x) {
             return {
               id: x.id,
@@ -171,7 +295,8 @@
               order: x.sort_order
             };
           }),
-          sampleItems: []                       // D12
+
+          sampleItems: []
         };
 
         /* ---------- testimonial videos (flat, never a gallery) ------- */
@@ -190,28 +315,39 @@
               order: t.sort_order
             };
           }),
-          sampleItems: []                       // D12
+
+          sampleItems: []
         };
 
         /* ---------- galleries ---------- */
         var mediaByProject = {};
+
         media.forEach(function (m) {
-          (mediaByProject[m.project_id] = mediaByProject[m.project_id] || []).push(m);
+          (mediaByProject[m.project_id] =
+            mediaByProject[m.project_id] || []).push(m);
         });
 
         var projectsByCategory = {};
+
         projects.forEach(function (p) {
-          (projectsByCategory[p.category_id] = projectsByCategory[p.category_id] || []).push(p);
+          (projectsByCategory[p.category_id] =
+            projectsByCategory[p.category_id] || []).push(p);
         });
 
         var categoriesBySection = {};
+
         categories.forEach(function (c) {
-          (categoriesBySection[c.section_id] = categoriesBySection[c.section_id] || []).push(c);
+          (categoriesBySection[c.section_id] =
+            categoriesBySection[c.section_id] || []).push(c);
         });
 
         sections.forEach(function (section) {
           var dataKey = SECTION_TO_DATA_KEY[section.section_key];
-          if (!dataKey) return;
+
+          if (!dataKey) {
+            return;
+          }
+
           var isVideoSection = section.media_type === "videos";
           var cats = categoriesBySection[section.id] || [];
 
@@ -226,8 +362,9 @@
                 order: c.sort_order
               };
             }),
+
             projects: [],
-            sampleProjects: []                  // D12
+            sampleProjects: []
           };
 
           cats.forEach(function (c) {
@@ -245,15 +382,25 @@
                     published: true
                   };
                 }
+
                 return {
                   id: m.id,
+
                   /* image = DISPLAY copy. The grid uses .thumbnail and
                      the viewer uses .display; .image stays as an alias
                      so nothing else breaks. */
-                  image: g[m.display_path] || g[m.thumbnail_path] || null,
+                  image:
+                    g[m.display_path] ||
+                    g[m.thumbnail_path] ||
+                    null,
+
                   display: g[m.display_path] || null,
                   thumbnail: g[m.thumbnail_path] || null,
-                  originalPath: m.storage_path,   // HD, fetched on demand only
+
+                  /* HD original path is retained but NOT signed during
+                     normal browsing. */
+                  originalPath: m.storage_path,
+
                   caption: m.caption,
                   order: m.sort_order,
                   published: true
@@ -269,6 +416,7 @@
                 published: true,
                 order: p.sort_order
               };
+
               entry[isVideoSection ? "videos" : "photos"] = items;
               block.projects.push(entry);
             });
@@ -287,8 +435,23 @@
      when something explicitly asks for full quality — never during
      normal browsing. */
   function getOriginal(path) {
-    return window.LLCSignedUrls.getOne("gallery-media", path);
+    if (!path) {
+      return Promise.reject(new Error("Original path is required"));
+    }
+
+    return client.storage
+      .from("gallery-media")
+      .createSignedUrl(path, 3600)
+      .then(function (res) {
+        if (res.error) throw res.error;
+        return res.data && res.data.signedUrl
+          ? res.data.signedUrl
+          : null;
+      });
   }
 
-  window.LLCDataService = { load: load, getOriginal: getOriginal };
+  window.LLCDataService = {
+    load: load,
+    getOriginal: getOriginal
+  };
 })();
