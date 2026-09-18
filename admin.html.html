@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Luigi Lindell Construction — Admin</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<!-- ============================================================
+     DATABASE-READY LOGIN GATE
+     Email + Password only — no Facebook/Google/Mobile/
+     Sign-Up/Create-Account, and no Client login options. Submitting
+     this form calls AuthService.login(), which in production would
+     call a real backend (see AuthService comments in the script
+     below); here it is backed by an explicitly-labeled development
+     mock since no backend exists yet.
+     ============================================================ -->
+<div id="admin-login-gate" class="login-screen">
+  <div class="panel login-screen__panel">
+    <h1 class="login-screen__title">Luigi Lindell Construction</h1>
+    <p class="login-screen__subtitle">Admin</p>
+    <p class="hours-caption">This build authenticates through a development mock service (no backend is connected yet) — see the AuthService code comments for the real backend integration points.</p>
+    <form id="admin-login-form" novalidate>
+      <label class="field">Email<input type="email" id="login-username" autocomplete="username" required></label>
+      <label class="field">Password<input type="password" id="login-password" autocomplete="current-password" required></label>
+      <p class="auth-error" id="login-error" hidden></p>
+      <button type="submit" class="btn btn--primary full-width">Login</button>
+      <p class="login-screen__hint">
+        <button type="button" class="link-btn" id="btn-admin-forgot">Forgot your password?</button>
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN PASSWORD RESET — RETURN SCREEN (Modification 7)
+     Shown only when the page loads with "#reset" in the URL, which
+     requestStaffPasswordReset()'s redirectTo appends. Mirrors the
+     Client site's own "#reset" + set-password pattern (js/bootstrap.js,
+     index.html) rather than inventing a second mechanism. Hidden the
+     rest of the time.
+     ============================================================ -->
+<div id="admin-reset-gate" class="login-screen" hidden>
+  <div class="panel login-screen__panel">
+    <h1 class="login-screen__title">Luigi Lindell Construction</h1>
+    <p class="login-screen__subtitle">Admin — Set a new password</p>
+    <form id="admin-set-password-form" novalidate>
+      <label class="field">New Password
+        <input type="password" id="admin-set-password" required minlength="8" autocomplete="new-password">
+      </label>
+      <label class="field">Confirm New Password
+        <input type="password" id="admin-set-password-confirm" required minlength="8" autocomplete="new-password">
+      </label>
+      <p class="auth-error" id="admin-set-password-error" hidden></p>
+      <button type="submit" class="btn btn--primary full-width">Save password</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN APP SHELL — hidden until AuthService confirms an
+     authenticated session (see the init block at the bottom of the
+     script). This app is a completely separate application from the
+     Phase 9 Client and never talks to the Client HTML.
+     ============================================================ -->
+<div id="admin-app-shell" hidden>
+
+  <div class="top-bar">
+    <div class="top-bar__inner">
+      <div class="top-bar__brand">
+        <span class="top-bar__mark">Luigi Lindell Construction</span>
+        <span class="top-bar__meta">Admin Dashboard</span>
+      </div>
+      <div id="admin-auth-area" class="auth-area"></div>
+    </div>
+  </div>
+
+  <header class="cover">
+    <img id="admin-cover-photo" class="cover__photo" src="" alt="" />
+    <div class="cover__scrim"></div>
+  </header>
+
+  <div class="identity-band">
+    <div class="identity-top">
+      <div class="profile-photo">
+        <img id="admin-profile-photo" src="" alt="" />
+      </div>
+    </div>
+    <h1 class="company-name">
+      <span id="admin-company-name"></span><span class="admin-role-badge">Admin</span>
+    </h1>
+  </div>
+
+  <div class="page">
+    <nav class="sidebar" aria-label="Admin sections">
+      <p class="sidebar__heading">Admin sections</p>
+      <ul id="admin-nav-list" class="nav-list"></ul>
+    </nav>
+
+    <div id="admin-tab-strip" class="tab-strip" aria-label="Admin sections"></div>
+
+    <main id="admin-main-content" class="main-content" aria-live="polite"></main>
+  </div>
+
+  <footer class="site-footer">
+    Luigi Lindell Construction — Admin · Calaca City, Batangas, Philippines
+  </footer>
+
+</div><!-- /#admin-app-shell -->
+
+<div id="admin-toast" class="toast" role="status"></div>
+
+<!-- Supabase client library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+
+<!-- Shared helpers (same files the Client site uses) -->
+<script src="js/supabase-client.js"></script>
+<script src="js/escape-html.js"></script>
+<script src="js/signed-urls.js"></script>
+<script src="js/media-pipeline.js"></script>
+
+<!-- Admin backend: apiAdapter + all load/persist replacements.
+     MUST load before admin.js, which reads window.LLCAdminBackend. -->
+<script src="js/admin-supabase.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

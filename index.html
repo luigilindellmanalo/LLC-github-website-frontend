@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Luigi Lindell Construction</title>
+<meta name="description" content="Luigi Lindell Construction — new house construction, renovation, commercial, resort, hotel, subdivision, land development, industrial building and project management consultancy in Calaca City, Batangas, Philippines." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     APP SHELL — all public company content. Hidden until the
+     visitor is logged in (see js/auth.js + js/app.js showApp/hideApp).
+     There is no "browse as guest" — see auth-modal below.
+     ============================================================ -->
+<div id="app-shell" hidden>
+
+<div class="top-bar">
+  <div class="top-bar__inner">
+    <div class="top-bar__brand">
+      <span class="top-bar__mark">Luigi Lindell Construction</span>
+      <span class="top-bar__meta">Calaca City, Batangas, Philippines</span>
+    </div>
+    <div id="auth-area" class="auth-area"></div>
+  </div>
+</div>
+
+<header class="cover">
+  <img id="cover-photo" class="cover__photo" src="" alt="" />
+  <div class="cover__scrim"></div>
+</header>
+
+<div class="identity-band">
+  <div class="identity-top">
+    <div class="profile-photo">
+      <img id="profile-photo" src="" alt="" />
+    </div>
+  </div>
+
+  <h1 id="company-name" class="company-name"></h1>
+
+  <div class="company-description">
+    <p id="company-tagline" class="company-tagline"></p>
+    <button type="button" id="btn-desc-toggle" class="desc-toggle" hidden>See more</button>
+  </div>
+
+  <div class="action-row">
+    <button id="btn-message" class="btn btn--primary">
+      <span aria-hidden="true">&#128172;</span><span class="btn__label">Message</span>
+    </button>
+    <button id="btn-call" class="btn btn--secondary">
+      <span aria-hidden="true">&#128222;</span><span class="btn__label">Call</span>
+    </button>
+    <button id="btn-projects" class="btn btn--amber">
+      <span aria-hidden="true">&#127959;</span><span class="btn__label">Projects</span>
+    </button>
+  </div>
+</div>
+
+<div class="page">
+  <nav class="sidebar" aria-label="Page sections">
+    <p class="sidebar__heading">Page sections</p>
+    <ul id="nav-list" class="nav-list"></ul>
+  </nav>
+
+  <div id="tab-strip" class="tab-strip" aria-label="Page sections"></div>
+
+  <main id="main-content" class="main-content" aria-live="polite"></main>
+</div>
+
+<footer class="site-footer">
+  Luigi Lindell Construction — Calaca City, Batangas, Philippines
+</footer>
+
+<button id="float-message" class="float-message" aria-label="Open chat">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <path d="M4 5.5h16v11H9.5L5 20v-3.5H4z" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>
+</button>
+
+</div><!-- /#app-shell -->
+
+<div id="toast" class="toast" role="status"></div>
+
+<!-- ============ Video testimonial player ============ -->
+<div id="video-modal" class="auth-modal video-modal" hidden>
+  <div class="auth-modal__backdrop" data-close></div>
+  <div class="auth-modal__panel video-modal__panel" role="dialog" aria-modal="true" aria-labelledby="video-modal-title">
+    <button type="button" class="auth-modal__close" data-close aria-label="Close">&times;</button>
+    <div class="video-modal__player-wrap">
+      <video id="video-modal-player" controls playsinline></video>
+    </div>
+    <h2 id="video-modal-title" class="video-modal__title"></h2>
+    <p id="video-modal-desc" class="video-modal__desc"></p>
+  </div>
+</div>
+
+<!-- ============ Design Photos viewer (lightbox) ============ -->
+<div id="photo-modal" class="photo-modal" hidden>
+  <div class="photo-modal__backdrop" data-close></div>
+  <div class="photo-modal__panel" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button type="button" class="photo-modal__close" data-close aria-label="Close">&times;</button>
+    <p id="photo-modal-crumb" class="photo-modal__crumb"></p>
+    <span id="photo-modal-sample-badge" class="sample-badge photo-modal__sample-badge" hidden>SAMPLE — PROTOTYPE</span>
+
+    <div id="photo-modal-viewer" class="photo-modal__viewer">
+      <button type="button" id="photo-modal-prev" class="photo-modal__nav photo-modal__nav--prev" aria-label="Previous photo">&#8249;</button>
+      <img id="photo-modal-img" src="" alt="" />
+      <button type="button" id="photo-modal-next" class="photo-modal__nav photo-modal__nav--next" aria-label="Next photo">&#8250;</button>
+    </div>
+
+    <div class="photo-modal__footer">
+      <p id="photo-modal-caption" class="photo-modal__caption"></p>
+      <p id="photo-modal-counter" class="photo-modal__counter"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Client conversation (Message / floating Chat / hours-row Chat all open this) ============ -->
+<div id="chat-modal" class="auth-modal chat-modal" hidden>
+  <div class="auth-modal__backdrop" data-close></div>
+  <div class="auth-modal__panel chat-modal__panel" role="dialog" aria-modal="true" aria-labelledby="chat-modal-title">
+    <button type="button" class="auth-modal__close" data-close aria-label="Close">&times;</button>
+    <div class="chat-modal__header">
+      <h2 id="chat-modal-title">Luigi Lindell Construction</h2>
+      <p class="chat-modal__sub">Your conversation — one continuous thread, anytime.</p>
+    </div>
+    <div id="chat-modal-messages" class="chat-modal__messages"></div>
+    <div id="chat-attach-preview" class="chat-attach-preview" hidden>
+      <img id="chat-attach-thumb" alt="Photo to send">
+      <span id="chat-attach-name" class="chat-attach-preview__name"></span>
+      <button type="button" id="chat-attach-remove" class="chat-attach-preview__remove" aria-label="Remove photo">&times;</button>
+    </div>
+    <p id="chat-attach-status" class="chat-attach-status" hidden></p>
+    <form id="form-chat" class="chat-modal__composer" novalidate>
+      <!-- Photos only. Client chat video is not supported (D17). HEIC is
+           accepted here and converted to JPEG on the device (D16). -->
+      <input type="file" id="chat-photo-input" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden>
+      <button type="button" id="btn-chat-photo" class="chat-composer__attach" aria-label="Send a photo">&#128247;</button>
+      <input type="text" id="chat-input" placeholder="Type a message…" autocomplete="off">
+      <button type="submit" class="btn btn--primary">Send</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     SIGN-IN GATE — the first and only thing a visitor sees before
+     logging in. Not a dismissible popup: no close button, no
+     backdrop-click-to-dismiss. See js/auth.js.
+     ============================================================ -->
+<div id="auth-modal" class="auth-modal auth-gate" hidden>
+  <div class="auth-modal__backdrop"></div>
+  <div class="auth-modal__panel" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+
+    <div class="auth-modal__brand">
+      <h2 id="auth-modal-title">Luigi Lindell Construction</h2>
+      <p class="auth-modal__sub">Sign in to view the company page and keep track of your inquiries.</p>
+    </div>
+
+
+    <div id="auth-step-choice" class="auth-step">
+      <button type="button" id="btn-continue-mobile" class="btn btn--secondary full-width">Continue with Mobile Number</button>
+      <button type="button" id="btn-continue-email" class="btn btn--secondary full-width">Continue with Email</button>
+
+      <div class="auth-divider"><span>or</span></div>
+
+      <div class="auth-choice-row">
+        <button type="button" class="link-btn" data-goto="login">Log In</button>
+        <span class="auth-choice-sep">·</span>
+        <button type="button" class="link-btn" data-goto="signup">Create Account</button>
+      </div>
+      <p class="auth-error" id="choice-error" hidden></p>
+    </div>
+
+    <div id="auth-step-login" class="auth-step" hidden>
+      <form id="form-login" novalidate>
+        <label class="field">Email
+          <input type="email" id="login-email" required autocomplete="email">
+        </label>
+        <label class="field">Password
+          <input type="password" id="login-password" required autocomplete="current-password">
+        </label>
+        <p class="auth-error" id="login-error" hidden></p>
+        <button type="submit" class="btn btn--primary full-width">Log in</button>
+      </form>
+      <p class="auth-switch">New client? <button type="button" class="link-btn" data-goto="signup">Create account</button></p>
+      <p class="auth-switch"><button type="button" class="link-btn" data-goto="reset">Forgot your password?</button></p>
+      <button type="button" class="link-btn auth-back" data-goto="choice">&larr; Back</button>
+    </div>
+
+    <div id="auth-step-mobile" class="auth-step" hidden>
+      <form id="form-mobile" novalidate>
+        <label class="field">Mobile Number
+          <input type="tel" id="mobile-number" required autocomplete="tel" placeholder="0975 526 6616">
+        </label>
+        <label class="field">Password
+          <input type="password" id="mobile-password" required autocomplete="current-password">
+        </label>
+        <p class="auth-error" id="mobile-error" hidden></p>
+        <button type="submit" class="btn btn--primary full-width">Log in</button>
+      </form>
+      <p class="auth-switch"><button type="button" class="link-btn" data-goto="reset">Forgot your password?</button></p>
+      <button type="button" class="link-btn auth-back" data-goto="choice">&larr; Back</button>
+    </div>
+
+    <div id="auth-step-signup" class="auth-step" hidden>
+      <form id="form-signup" novalidate>
+        <label class="field">First Name
+          <input type="text" id="signup-first-name" required autocomplete="given-name">
+        </label>
+        <label class="field">Middle Name <span class="field__optional">(optional)</span>
+          <input type="text" id="signup-middle-name" autocomplete="additional-name">
+        </label>
+        <label class="field">Last Name
+          <input type="text" id="signup-last-name" required autocomplete="family-name">
+        </label>
+        <label class="field">Email
+          <input type="email" id="signup-email" required autocomplete="email">
+        </label>
+        <label class="field">Confirm Email
+          <input type="email" id="signup-confirm-email" required autocomplete="email">
+        </label>
+        <label class="field">Mobile Number
+          <input type="tel" id="signup-mobile" required autocomplete="tel" placeholder="0975 526 6616">
+        </label>
+        <label class="field">Location Address
+          <input type="text" id="signup-address" required autocomplete="street-address">
+        </label>
+        <label class="field">Password
+          <input type="password" id="signup-password" required minlength="8" autocomplete="new-password">
+        </label>
+        <label class="field">Confirm Password
+          <input type="password" id="signup-confirm-password" required minlength="8" autocomplete="new-password">
+        </label>
+        <p class="auth-error" id="signup-error" hidden></p>
+        <button type="submit" class="btn btn--primary full-width">Create account</button>
+      </form>
+      <p class="auth-switch">Already have an account? <button type="button" class="link-btn" data-goto="login">Log in</button></p>
+      <button type="button" class="link-btn auth-back" data-goto="choice">&larr; Back</button>
+    </div>
+
+    <!-- Password reset request (D19) -->
+    <div id="auth-step-reset" class="auth-step" hidden>
+      <p class="auth-modal__sub">Enter your email and we'll send you a link to set a new password.</p>
+      <form id="form-reset" novalidate>
+        <label class="field">Email
+          <input type="email" id="reset-email" required autocomplete="email">
+        </label>
+        <p class="auth-error" id="reset-error" hidden></p>
+        <button type="submit" class="btn btn--primary full-width">Send reset link</button>
+      </form>
+      <button type="button" class="link-btn auth-back" data-goto="choice">&larr; Back</button>
+    </div>
+
+    <!-- Set a new password after following the emailed link (D19) -->
+    <div id="auth-step-set-password" class="auth-step" hidden>
+      <p class="auth-modal__sub">Choose a new password for your account.</p>
+      <form id="form-set-password" novalidate>
+        <label class="field">New Password
+          <input type="password" id="set-password" required minlength="8" autocomplete="new-password">
+        </label>
+        <label class="field">Confirm New Password
+          <input type="password" id="set-confirm-password" required minlength="8" autocomplete="new-password">
+        </label>
+        <p class="auth-error" id="set-password-error" hidden></p>
+        <button type="submit" class="btn btn--primary full-width">Save password</button>
+      </form>
+    </div>
+
+    <!-- Archived account (D22). The session is NOT terminated; the
+         client simply sees this instead of the site, and may log out
+         themselves. Every query returns nothing regardless. -->
+    <div id="auth-step-archived" class="auth-step" hidden>
+      <h3 class="auth-archived__title">This account is no longer active</h3>
+      <p class="auth-modal__sub">
+        Please contact us on <strong id="archived-contact-number">0975 526 6616</strong>
+        if you think this is a mistake.
+      </p>
+      <button type="button" id="btn-archived-logout" class="btn btn--primary full-width">Log out</button>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     LOAD ORDER MATTERS.
+
+     app.js line 13 captures window.SITE_DATA at parse time, and the
+     content cannot be fetched until someone has signed in (every table
+     is behind the login gate). So app.js is NOT loaded here — bootstrap
+     injects it after sign-in, once the content exists. That leaves
+     app.js line 13 and its rendering engine untouched.
+     ========================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+
+<script src="js/supabase-client.js"></script>
+<script src="js/escape-html.js"></script>
+<script src="js/signed-urls.js"></script>
+<script src="js/media-pipeline.js"></script>
+<script src="js/db-service.js"></script>
+<script src="js/auth-service.js"></script>
+<script src="js/chat-service.js"></script>
+<script src="js/archived-state.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+LUIGI LINDELL CONSTRUCTION — WEBSITE FILES
+==========================================
+
+This is the Client site and the Admin app. The code that CONNECTS them
+to Supabase is written and in place; the connection itself has not been
+run against a real Supabase project, because none exists yet. See
+"WHAT IS ACTUALLY VERIFIED" below before assuming anything here has
+been tested live.
+
+DO NOT UPLOAD THIS FOLDER TO SUPABASE. Supabase is not a website host —
+it holds your data, files, logins and security rules. These files go to
+GitHub Pages (or any web host), and the JavaScript here calls Supabase
+over the internet.
+
+
+-------------------------------------------------------------------
+WHAT IS ACTUALLY VERIFIED, AND WHAT IS NOT
+-------------------------------------------------------------------
+
+A. THESE FILES (this folder) — GitHub / your web host
+   Everything here is static: HTML, CSS, and JavaScript. Nothing in
+   this folder runs on a server. It is checked for syntax errors and
+   internal consistency (every script path resolves, every function
+   referenced exists), which is confirmed.
+
+B. YOUR SUPABASE PROJECT — configured separately, in ZIP 1
+   Not part of this folder at all. Tables, security rules, storage
+   buckets, and login accounts live there once you create it.
+
+C. WHAT HAS BEEN WRITTEN IN CODE
+   - Sign-in, sign-out, and session checks select the real Supabase
+     backend automatically once configured, and use a local
+     development fallback when it is not.
+   - Company info, business hours, navigation, clients, conversations,
+     staff, gallery categories/projects/media, reviews, and testimonial
+     videos all have a path to read from and write to Supabase when it
+     is configured.
+   - New clients, new gallery categories/projects, and new reviews are
+     given a temporary local id, then updated with the real database id
+     once the save succeeds, so a second edit targets the right row.
+   - Staff can request a password reset email and there is a screen to
+     complete it and set a new password.
+
+D. WHAT CANNOT BE CONFIRMED UNTIL A REAL SUPABASE PROJECT EXISTS
+   Every item in C is untested against a live database. Whether a
+   column name matches your actual deployed schema, whether a security
+   rule permits or blocks something as intended, whether the password
+   reset email actually arrives and the link actually works — none of
+   this can be known from reading code. The first live connection will
+   surface things a review cannot. This is normal, not a sign of a
+   problem, and it is why LIVE-TEST-CHECKLIST.md (delivered separately)
+   exists.
+
+   Two review/testimonial-video column names are the one place where
+   more care is warranted: they are inferred correctly from this
+   package's own js/db-service.js file rather than from a schema file,
+   so double-check them against your actual database before relying on
+   review or testimonial editing in the Admin.
+
+
+-------------------------------------------------------------------
+BEFORE ANYTHING WILL WORK — TWO VALUES
+-------------------------------------------------------------------
+
+Open  js/supabase-client.js  and fill in the two blanks near the top:
+
+    var SUPABASE_URL      = "";   <-- https://xxxxxxxx.supabase.co
+    var SUPABASE_ANON_KEY = "";   <-- the "anon" / "public" key
+
+Both are in your Supabase dashboard under Settings -> API.
+
+The anon key is MEANT to be public and belongs in this file. It is safe
+only because the security rules (RLS policies) you ran in ZIP 1 sit
+behind it.
+
+NEVER put the service_role key in any file here. That key bypasses every
+security rule you have written. It belongs only inside Supabase.
+
+Until those two values are filled in, both the Client site and the
+Admin run entirely on local browser storage, exactly like the original
+prototype — nothing is sent to Supabase, and no placeholder URL is
+ever called. The Admin also shows a plain-language notice on its login
+screen while running this way, so it is never mistaken for a live
+connection.
+
+
+-------------------------------------------------------------------
+FOLDER STRUCTURE — KEEP IT EXACTLY AS IT IS
+-------------------------------------------------------------------
+
+    index.html
+    css/styles.css
+    js/            (11 files)
+    admin/         (4 files)
+
+index.html looks for css/styles.css and js/app.js at those exact paths.
+If the files are flattened into one folder, every link breaks and the
+site renders as a blank page. Upload the folders, not loose files.
+
+
+-------------------------------------------------------------------
+WHAT IS HERE
+-------------------------------------------------------------------
+
+CLIENT SITE          index.html + css/ + js/
+ADMIN                admin/luigi-lindell-construction-admin-dbready.html
+                     (open this one directly; it links to the rest)
+
+The Admin loads four shared files from ../js/, so keep both folders
+together.
+
+
+-------------------------------------------------------------------
+NOT INCLUDED, ON PURPOSE
+-------------------------------------------------------------------
+
+data.js            Replaced by js/db-service.js. Content now comes from
+                   the database, so a static content file would only
+                   compete with it.
+
+The "Presentation" Admin build (luigi-lindell-construction-admin.html)
+                   Left out deliberately. It has a role-switcher
+                   dropdown and no login. Pointed at a live database it
+                   would let anyone view real customer data. Keep it as
+                   a demo file only, never on the web host.
+
+Prototype backups  You already hold your original files.
+
+An SRI integrity hash on the Supabase script tag
+                   Deliberately not added. Verifying the real hash
+                   requires fetching the exact file from the CDN, which
+                   was not possible in this environment. Adding a
+                   guessed hash would be worse than none — the browser
+                   would refuse to load Supabase entirely if it were
+                   wrong. Add the real one yourself once you can verify
+                   it (jsdelivr publishes hashes for pinned versions).
+
+
+-------------------------------------------------------------------
+BEFORE YOU PUT THIS ON THE INTERNET
+-------------------------------------------------------------------
+
+1. Set up the Supabase backend from ZIP 1 first.
+2. Run the security tests BEFORE connecting this frontend. An hour
+   against an empty database is straightforward; the same tests after
+   real customer conversations exist are not.
+3. Connect the Admin first, and check that each of the four roles sees
+   only what it should — including that reviews and testimonial videos
+   actually save (see the column-name note above).
+4. Then the Client site.
+
+Full step-by-step instructions are in SUPABASE-SETUP-RUNBOOK.md, and the
+tests are in LIVE-TEST-CHECKLIST.md. Both were delivered separately.
+
+
+-------------------------------------------------------------------
+ONE HONEST NOTE
+-------------------------------------------------------------------
+
+Every file here has been syntax-checked and every internal link and
+cross-file function call verified, but none of it has run against a
+real database. No claim in this document should be read as "this has
+been tested live" — nothing here has. The first run will surface
+things that reading code cannot: a column name that does not match, a
+rule that blocks something the screen expects.
+
+That is normal for a first connection. Set aside a session for it rather
+than expecting everything to work first time.
+
