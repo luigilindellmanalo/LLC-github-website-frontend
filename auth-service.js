@@ -108,21 +108,83 @@
          outage, an RLS misconfiguration during setup) -> unknown, and
          must NOT be reported to a real customer as "your account is no
          longer active". That message is only true in the first case. */
-  function loadProfile() {
+   function loadProfile() {
+    /*
+     * STAFF FIRST
+     * -----------
+     * Staff accounts intentionally have no row in client_self_view.
+     * current_staff_role() is the database's authoritative way to
+     * determine whether the authenticated user is an enabled staff
+     * member and, if so, which role they have.
+     *
+     * If it returns a role, this is a valid staff session and must
+     * NEVER fall through to the client's archived-account check.
+     */
     return client
-      .from("client_self_view")
-      .select("*")
-      .maybeSingle()
-      .then(function (res) {
-        if (res.error) throw res.error;   // genuine failure — propagates, NOT archived
-        if (!res.data) {
-          currentUser = null;
-          isArchived = true;
-          return null;
+      .rpc("current_staff_role")
+      .then(function (staffRes) {
+        if (staffRes.error) throw staffRes.error;
+
+        if (staffRes.data) {
+          return client.auth.getSession().then(function (sessionRes) {
+            if (sessionRes.error) throw sessionRes.error;
+
+            var authUser =
+              sessionRes.data && sessionRes.data.session
+                ? sessionRes.data.session.user
+                : null;
+
+            if (!authUser) {
+              throw new Error("Authenticated session disappeared while loading staff profile.");
+            }
+
+            currentUser = {
+              clientId: authUser.id,
+              firstName: "",
+              middleName: null,
+              lastName: "",
+              email: authUser.email || "",
+              mobileNumber: "",
+              mobileE164: null,
+              locationAddress: "",
+              authenticationProvider: "password",
+              role: staffRes.data,
+              staffRole: staffRes.data,
+              createdAt: authUser.created_at || null,
+              remarks: "",
+              projectType: "",
+              bedrooms: null,
+              cr: null,
+              bestTimeToCall: ""
+            };
+
+            isArchived = false;
+            return currentUser;
+          });
         }
-        currentUser = mapProfile(res.data);
-        isArchived = false;
-        return currentUser;
+
+        /*
+         * Not staff.
+         * Now use the existing client profile / archived-account
+         * logic exactly as before.
+         */
+        return client
+          .from("client_self_view")
+          .select("*")
+          .maybeSingle()
+          .then(function (res) {
+            if (res.error) throw res.error;
+
+            if (!res.data) {
+              currentUser = null;
+              isArchived = true;
+              return null;
+            }
+
+            currentUser = mapProfile(res.data);
+            isArchived = false;
+            return currentUser;
+          });
       });
   }
 
