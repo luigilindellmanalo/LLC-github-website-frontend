@@ -1,28 +1,26 @@
+```javascript
 /* =====================================================================
    supabase-client.js — the single connection point
    =====================================================================
    Used by BOTH the Client site and the Admin app, with the same
    session-only configuration (D20 + D21).
 
-   ⚠️ CONFIGURE BEFORE USE — the two values below are placeholders.
-   Fill them in after creating the Supabase project (runbook step 2).
-
    WHAT GOES HERE AND WHAT NEVER DOES
-   The ANON key belongs here. It is designed to be public and appears
-   in every visitor's browser. It is safe ONLY because Row Level
+   The publishable key belongs here. It is designed to be public and
+   appears in every visitor's browser. It is safe ONLY because Row Level
    Security stands behind it.
 
-   The SERVICE_ROLE key must NEVER appear in this file, in any frontend
-   file, or anywhere in GitHub. It bypasses every security policy in
-   the system. It lives only inside Supabase Edge Functions.
+   The SECRET key must NEVER appear in this file, in any frontend
+   file, or anywhere in GitHub. It bypasses security policies and
+   belongs only inside Supabase backend components.
    ===================================================================== */
 (function () {
   "use strict";
 
-  /* ---------- CONFIGURE THESE TWO VALUES ---------- */
-  var SUPABASE_URL = "https://YOUR-PROJECT-REF.supabase.co";
+  /* ---------- SUPABASE PROJECT CONFIGURATION ---------- */
+  var SUPABASE_URL = "https://qkznwtbwomfmbzxngrhu.supabase.co";
   var SUPABASE_ANON_KEY = "sb_publishable_n-E4TbfGKVQ5h7RDjEnwDQ_SJk5L_Ew";
-  /* ------------------------------------------------ */
+  /* ---------------------------------------------------- */
 
   var EDGE = SUPABASE_URL + "/functions/v1/";
 
@@ -95,13 +93,20 @@
      during testing. Harmless if nothing is present. */
   function clearPrototypeStorage() {
     try {
-      ["llc_mock_users", "llc_mock_session", "llc_admin_current_user_id",
-       "llc_admin_mock_session"].forEach(function (k) {
+      [
+        "llc_mock_users",
+        "llc_mock_session",
+        "llc_admin_current_user_id",
+        "llc_admin_mock_session"
+      ].forEach(function (k) {
         window.localStorage.removeItem(k);
         window.sessionStorage.removeItem(k);
       });
+
       Object.keys(window.sessionStorage).forEach(function (k) {
-        if (k.indexOf("llc_conversation_") === 0) window.sessionStorage.removeItem(k);
+        if (k.indexOf("llc_conversation_") === 0) {
+          window.sessionStorage.removeItem(k);
+        }
       });
     } catch (e) {
       /* Private browsing can block storage access. Not fatal. */
@@ -121,3 +126,4 @@
     }
   };
 })();
+```
