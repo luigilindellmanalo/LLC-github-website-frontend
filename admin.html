@@ -1,943 +1,578 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Luigi Lindell Construction — Staff</title>
-  <meta name="robots" content="noindex, nofollow" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  >
-
-  <!-- SAME VISUAL SYSTEM AS THE CLIENT SITE -->
-  <link rel="stylesheet" href="styles.css">
-
-  <style>
-    /* ============================================================
-       STAFF LOGIN
-       ============================================================ */
-
-    body {
-      margin: 0;
-      background: var(--concrete, #eceae4);
-      color: var(--ink, #171b1f);
-    }
-
-    [hidden] {
-      display: none !important;
-    }
-
-    .staff-login {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      box-sizing: border-box;
-    }
-
-    .staff-login__card {
-      width: min(100%, 440px);
-      background: #fff;
-      border: 1px solid rgba(23, 27, 31, 0.10);
-      border-radius: 18px;
-      padding: 32px;
-      box-shadow: 0 18px 55px rgba(23, 27, 31, 0.12);
-      box-sizing: border-box;
-    }
-
-    .staff-login__eyebrow {
-      margin: 0 0 8px;
-      font: 700 12px/1.2 "Space Grotesk", sans-serif;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--amber, #e2a610);
-    }
-
-    .staff-login__title {
-      margin: 0;
-      font: 700 28px/1.1 "Space Grotesk", sans-serif;
-      color: var(--steel-dark, #1a3346);
-    }
-
-    .staff-login__sub {
-      margin: 10px 0 24px;
-      font: 400 14px/1.55 Inter, sans-serif;
-      color: var(--slate, #4b5760);
-    }
-
-    .staff-field {
-      display: block;
-      margin: 0 0 16px;
-      font: 600 13px/1.3 Inter, sans-serif;
-      color: var(--ink, #171b1f);
-    }
-
-    .staff-field span {
-      display: block;
-      margin-bottom: 7px;
-    }
-
-    .staff-field input {
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid #cbd1d5;
-      border-radius: 10px;
-      padding: 12px 13px;
-      background: #fff;
-      color: var(--ink, #171b1f);
-      font: 400 15px/1.3 Inter, sans-serif;
-      outline: none;
-    }
-
-    .staff-field input:focus {
-      border-color: var(--steel, #24435c);
-      box-shadow: 0 0 0 3px rgba(36, 67, 92, .10);
-    }
-
-    .staff-login__button {
-      width: 100%;
-      border: 0;
-      border-radius: 10px;
-      padding: 13px 16px;
-      background: var(--steel-dark, #1a3346);
-      color: #fff;
-      cursor: pointer;
-      font: 700 14px/1.2 "Space Grotesk", sans-serif;
-    }
-
-    .staff-login__button:hover {
-      opacity: .94;
-    }
-
-    .staff-login__button:disabled {
-      opacity: .55;
-      cursor: wait;
-    }
-
-    .staff-login__error {
-      margin: 0 0 16px;
-      padding: 11px 12px;
-      border-radius: 9px;
-      background: #fff1f1;
-      border: 1px solid #e6bcbc;
-      color: #8a2222;
-      font: 500 13px/1.45 Inter, sans-serif;
-    }
-
-    /* ============================================================
-       STAFF CONTROL BAR
-       ============================================================ */
-
-    .staff-bar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: var(--steel-dark, #1a3346);
-      color: #fff;
-      border-bottom: 3px solid var(--amber, #e2a610);
-    }
-
-    .staff-bar__inner {
-      width: min(100% - 28px, 1120px);
-      margin: 0 auto;
-      min-height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      box-sizing: border-box;
-    }
-
-    .staff-bar__identity {
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font: 600 13px/1.2 Inter, sans-serif;
-    }
-
-    .staff-bar__badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 5px 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.12);
-      color: #fff;
-      font: 700 11px/1 "Space Grotesk", sans-serif;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      white-space: nowrap;
-    }
-
-    .staff-bar__status {
-      color: rgba(255,255,255,.75);
-      font-size: 12px;
-    }
-
-    .staff-bar__actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .staff-bar__button {
-      border: 1px solid rgba(255,255,255,.22);
-      border-radius: 8px;
-      padding: 7px 10px;
-      background: rgba(255,255,255,.08);
-      color: #fff;
-      cursor: pointer;
-      font: 600 12px/1.2 Inter, sans-serif;
-    }
-
-    .staff-bar__button:hover {
-      background: rgba(255,255,255,.15);
-    }
-
-    .staff-bar__button--edit {
-      background: var(--amber, #e2a610);
-      border-color: var(--amber, #e2a610);
-      color: #171b1f;
-    }
-
-    /* ============================================================
-       STAFF EDITING AREA
-       ============================================================ */
-
-    .staff-editor {
-      width: min(100% - 28px, 1120px);
-      margin: 14px auto 0;
-      padding: 14px 16px;
-      box-sizing: border-box;
-      border: 1px solid rgba(36, 67, 92, .16);
-      border-radius: 12px;
-      background: #fff;
-      box-shadow: 0 8px 28px rgba(23, 27, 31, .06);
-    }
-
-    .staff-editor__head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .staff-editor__title {
-      margin: 0;
-      font: 700 16px/1.2 "Space Grotesk", sans-serif;
-      color: var(--steel-dark, #1a3346);
-    }
-
-    .staff-editor__note {
-      margin: 5px 0 0;
-      color: var(--slate, #4b5760);
-      font: 400 12px/1.45 Inter, sans-serif;
-    }
-
-    .staff-editor__controls {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .staff-editor__button {
-      border: 1px solid #cbd1d5;
-      border-radius: 8px;
-      padding: 9px 12px;
-      background: #fff;
-      color: var(--ink, #171b1f);
-      cursor: pointer;
-      font: 600 12px/1.2 Inter, sans-serif;
-    }
-
-    .staff-editor__button:hover {
-      border-color: var(--steel, #24435c);
-    }
-
-    .staff-editor__button--primary {
-      background: var(--steel, #24435c);
-      border-color: var(--steel, #24435c);
-      color: #fff;
-    }
-
-    .staff-editor__button--danger {
-      border-color: #c88787;
-      color: #8a2222;
-    }
-
-    .staff-editor__message {
-      margin: 10px 0 0;
-      min-height: 18px;
-      font: 500 12px/1.45 Inter, sans-serif;
-      color: var(--slate, #4b5760);
-    }
-
-    /* ============================================================
-       HIDE THE CLIENT AUTH GATE
-       ============================================================ */
-
-    #auth-gate {
-      display: none !important;
-    }
-
-    @media (max-width: 640px) {
-      .staff-login__card {
-        padding: 24px 20px;
-      }
-
-      .staff-bar__inner {
-        width: min(100% - 18px, 1120px);
-      }
-
-      .staff-bar__status {
-        display: none;
-      }
-
-      .staff-editor {
-        width: min(100% - 18px, 1120px);
-      }
-
-      .staff-bar__identity {
-        overflow: hidden;
-      }
-
-      .staff-bar__identity > span:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luigi Lindell Construction — Staff Portal</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+:root{
+  --admin-ink:#171b1f;--admin-slate:#4b5760;--admin-line:#d9d8d2;
+  --admin-white:#fff;--admin-bg:#f5f4ef;--admin-steel:#24435c;
+  --admin-dark:#1a3346;--admin-amber:#e2a610;--admin-danger:#b42318;
+  --admin-ok:#16703b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--admin-bg);color:var(--admin-ink);font-family:Inter,Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+.admin-top{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--admin-line)}
+.admin-top-inner{max-width:1240px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{font-family:"Space Grotesk",sans-serif;font-weight:700}
+.brand small{display:block;color:var(--admin-slate);font:500 .75rem Inter,sans-serif;margin-top:2px}
+.staff-actions{display:flex;align-items:center;gap:10px}
+.role{font-size:.75rem;font-weight:700;background:#e7edf1;color:var(--admin-dark);padding:5px 10px;border-radius:999px}
+.logout{border:1px solid var(--admin-line);background:#fff;padding:8px 12px;border-radius:7px}
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:25px}
+.login-card{width:min(430px,100%);background:#fff;border:1px solid var(--admin-line);border-radius:12px;padding:30px;box-shadow:0 12px 35px #0000000d}
+.login-card h1{font:700 1.7rem "Space Grotesk",sans-serif;margin:0 0 8px}
+.login-card p{color:var(--admin-slate);margin:0 0 22px}
+.field{display:block;margin:0 0 14px}
+.field>span{display:block;font-size:.8rem;font-weight:700;margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;border:1px solid #c9c8c1;border-radius:7px;padding:10px 11px;background:#fff;color:var(--admin-ink)}
+.field textarea{min-height:110px;resize:vertical}
+.btn{border:0;border-radius:7px;padding:10px 14px;font-weight:700}
+.btn-primary{background:var(--admin-dark);color:#fff}
+.btn-secondary{background:#fff;color:var(--admin-dark);border:1px solid var(--admin-line)}
+.btn-danger{background:#fff;color:var(--admin-danger);border:1px solid #e2b8b3}
+.btn-amber{background:var(--admin-amber);color:#171717}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.error{color:var(--admin-danger);font-size:.86rem;margin:10px 0}
+.ok{color:var(--admin-ok);font-size:.86rem;margin:10px 0}
+.portal{display:grid;grid-template-columns:245px 1fr;min-height:calc(100vh - 61px)}
+.sidebar{background:#fff;border-right:1px solid var(--admin-line);padding:20px 13px;position:sticky;top:61px;height:calc(100vh - 61px)}
+.side-title{font:700 1rem "Space Grotesk",sans-serif;padding:5px 10px 15px}
+.side-btn{display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:7px;padding:11px 12px;margin:2px 0;color:var(--admin-ink)}
+.side-btn:hover,.side-btn.active{background:#e7edf1;color:var(--admin-dark);font-weight:700}
+.main{min-width:0;padding:25px}
+.main-inner{max-width:1120px;margin:auto}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin-bottom:20px}
+.page-head h1{font:700 1.7rem "Space Grotesk",sans-serif;margin:0 0 5px}
+.page-head p{margin:0;color:var(--admin-slate)}
+.panel{background:#fff;border:1px solid var(--admin-line);border-radius:10px;padding:20px;margin-bottom:18px}
+.panel h2{font:700 1.12rem "Space Grotesk",sans-serif;margin:0 0 14px}
+.panel h3{font:700 .98rem "Space Grotesk",sans-serif;margin:0 0 12px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.notice{padding:11px 13px;border-radius:7px;background:#f0f3f5;color:var(--admin-slate);font-size:.85rem;margin-bottom:14px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{border:1px solid var(--admin-line);border-radius:8px;padding:14px}
+.stat b{display:block;font:700 1.35rem "Space Grotesk",sans-serif}
+.stat span{color:var(--admin-slate);font-size:.78rem}
+.list{display:grid;gap:10px}
+.item{border:1px solid var(--admin-line);border-radius:8px;padding:14px}
+.item-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.item-title{font-weight:700}
+.item-meta{font-size:.78rem;color:var(--admin-slate);margin-top:4px}
+.item-text{white-space:pre-wrap;color:var(--admin-slate);margin:10px 0 0;font-size:.9rem}
+.item-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.thumb{width:92px;height:68px;object-fit:cover;border-radius:6px;background:#eee;border:1px solid var(--admin-line)}
+.media-row{display:flex;gap:12px;align-items:center}
+.upload-box{border:1px dashed #aaa;border-radius:8px;padding:16px;background:#fafaf7}
+.progress{height:7px;background:#e7e6df;border-radius:999px;overflow:hidden;margin-top:10px}
+.progress i{display:block;height:100%;width:0;background:var(--admin-steel);transition:width .2s}
+.muted{color:var(--admin-slate);font-size:.83rem}
+.empty{padding:20px;text-align:center;color:var(--admin-slate);border:1px dashed var(--admin-line);border-radius:8px}
+.modal-backdrop{position:fixed;inset:0;background:#0008;z-index:100;padding:20px;overflow:auto}
+.modal{max-width:760px;margin:30px auto;background:#fff;border-radius:10px;padding:22px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-head h2{margin:0;font:700 1.2rem "Space Grotesk",sans-serif}
+.close{border:0;background:#eee;border-radius:50%;width:34px;height:34px}
+.file-name{font-size:.8rem;color:var(--admin-slate);margin-top:7px}
+.section-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.section-tabs button{border:1px solid var(--admin-line);background:#fff;padding:8px 11px;border-radius:7px}
+.section-tabs button.active{background:var(--admin-dark);color:#fff;border-color:var(--admin-dark)}
+.checkbox{display:flex;gap:8px;align-items:center;font-size:.86rem}
+@media(max-width:800px){
+ .portal{grid-template-columns:1fr}
+ .sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--admin-line);display:flex;overflow:auto;padding:8px}
+ .side-title{display:none}.side-btn{white-space:nowrap;width:auto}
+ .main{padding:15px}.grid-2,.grid-3,.stat-grid{grid-template-columns:1fr}
+ .page-head{align-items:flex-start;flex-direction:column}.admin-top-inner{padding:11px 14px}
+}
+</style>
 </head>
-
 <body>
 
-  <!-- ============================================================
-       LOGIN
-       ============================================================ -->
-
-  <section id="staff-login" class="staff-login">
-    <div class="staff-login__card">
-      <p class="staff-login__eyebrow">Luigi Lindell Construction</p>
-      <h1 class="staff-login__title">Staff Portal</h1>
-      <p class="staff-login__sub">
-        Sign in with an authorized staff account.
-      </p>
-
-      <form id="staff-login-form" novalidate>
-        <label class="staff-field">
-          <span>Email</span>
-          <input
-            id="staff-email"
-            type="email"
-            autocomplete="username"
-            required
-          >
-        </label>
-
-        <label class="staff-field">
-          <span>Password</span>
-          <input
-            id="staff-password"
-            type="password"
-            autocomplete="current-password"
-            required
-          >
-        </label>
-
-        <p id="staff-login-error" class="staff-login__error" hidden></p>
-
-        <button
-          id="staff-login-button"
-          class="staff-login__button"
-          type="submit"
-        >
-          Sign in
-        </button>
-      </form>
-    </div>
-  </section>
-
-
-  <!-- ============================================================
-       AUTHORIZED STAFF AREA
-       ============================================================ -->
-
-  <div id="staff-area" hidden>
-
-    <header class="staff-bar">
-      <div class="staff-bar__inner">
-
-        <div class="staff-bar__identity">
-          <span id="staff-user-label">Staff</span>
-          <span id="staff-role-badge" class="staff-bar__badge">Staff</span>
-          <span class="staff-bar__status">Editing mode</span>
-        </div>
-
-        <div class="staff-bar__actions">
-          <button
-            id="staff-edit-toggle"
-            class="staff-bar__button staff-bar__button--edit"
-            type="button"
-          >
-            Edit
-          </button>
-
-          <button
-            id="staff-refresh"
-            class="staff-bar__button"
-            type="button"
-          >
-            Refresh
-          </button>
-
-          <button
-            id="staff-logout"
-            class="staff-bar__button"
-            type="button"
-          >
-            Log out
-          </button>
-        </div>
-
-      </div>
-    </header>
-
-
-    <!--
-      This is intentionally a lightweight control layer for now.
-      The actual database mutations will be added after this shared
-      client rendering shell is confirmed working.
-    -->
-    <section id="staff-editor" class="staff-editor" hidden>
-      <div class="staff-editor__head">
-        <div>
-          <h2 class="staff-editor__title">Content editing</h2>
-          <p class="staff-editor__note">
-            You are viewing the same content and navigation used by clients.
-            Editing controls will operate on the same Supabase records.
-          </p>
-        </div>
-      </div>
-
-      <div class="staff-editor__controls">
-        <button
-          id="staff-add-content"
-          class="staff-editor__button staff-editor__button--primary"
-          type="button"
-        >
-          Add content
-        </button>
-
-        <button
-          id="staff-save"
-          class="staff-editor__button"
-          type="button"
-        >
-          Save changes
-        </button>
-
-        <button
-          id="staff-remove"
-          class="staff-editor__button staff-editor__button--danger"
-          type="button"
-        >
-          Remove
-        </button>
-      </div>
-
-      <p id="staff-editor-message" class="staff-editor__message"></p>
-    </section>
-
-
-    <!-- ==========================================================
-         SAME CLIENT DASHBOARD SHELL
-         ========================================================== -->
-
-    <div id="app-shell" hidden>
-
-      <header class="top-bar">
-        <div class="top-bar__inner">
-
-          <div class="top-bar__brand">
-            <div class="top-bar__mark">
-              Luigi Lindell Construction
-            </div>
-
-            <div class="top-bar__meta">
-              Calaca City, Batangas, Philippines
-            </div>
-          </div>
-
-          <div id="auth-area"></div>
-
-        </div>
-      </header>
-
-
-      <section class="cover">
-        <img
-          id="cover-photo"
-          class="cover__photo"
-          src=""
-          alt=""
-        >
-        <div class="cover__scrim"></div>
-      </section>
-
-
-      <section class="identity-band">
-        <div class="identity-band__inner">
-
-          <div class="profile-photo-wrap">
-            <img
-              id="profile-photo"
-              class="profile-photo"
-              src=""
-              alt=""
-            >
-          </div>
-
-          <div class="identity">
-            <h1 id="company-name"></h1>
-
-            <div class="company-description">
-              <p id="company-tagline"></p>
-              <button
-                id="btn-desc-toggle"
-                class="link-btn"
-                type="button"
-                hidden
-              >
-                See more
-              </button>
-            </div>
-
-            <div class="action-row">
-              <button
-                id="btn-message"
-                class="btn btn--primary"
-                type="button"
-              >
-                Message
-              </button>
-
-              <button
-                id="btn-call"
-                class="btn"
-                type="button"
-              >
-                Call
-              </button>
-
-              <button
-                id="btn-projects"
-                class="btn"
-                type="button"
-              >
-                Projects
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-
-      <main class="page">
-
-        <aside class="sidebar">
-          <nav aria-label="Company sections">
-            <ul id="nav-list"></ul>
-          </nav>
-        </aside>
-
-        <div class="page__content">
-
-          <div id="tab-strip" class="tab-strip"></div>
-
-          <section id="main-content"></section>
-
-        </div>
-
-      </main>
-
-
-      <footer class="footer">
-        <div class="footer__inner">
-          Luigi Lindell Construction
-        </div>
-      </footer>
-
-    </div>
-
-
-    <!-- Existing client modals required by app.js -->
-
-    <div id="float-message" hidden></div>
-
-    <div id="video-modal" hidden>
-      <div id="video-modal-backdrop"></div>
-      <div id="video-modal-content"></div>
-    </div>
-
-    <div id="photo-modal" hidden>
-      <div id="photo-modal-backdrop"></div>
-      <div id="photo-modal-content"></div>
-    </div>
-
-    <div id="chat-modal" hidden>
-      <div id="chat-modal-backdrop"></div>
-      <div id="chat-modal-content"></div>
-    </div>
-
+<div id="login-screen" class="login-wrap">
+  <div class="login-card">
+    <h1>Staff Portal</h1>
+    <p>Luigi Lindell Construction</p>
+    <form id="login-form">
+      <label class="field"><span>Email</span><input id="login-email" type="email" autocomplete="username" required></label>
+      <label class="field"><span>Password</span><input id="login-password" type="password" autocomplete="current-password" required></label>
+      <p id="login-error" class="error" hidden></p>
+      <button id="login-button" class="btn btn-primary" type="submit" style="width:100%">Log in</button>
+    </form>
+    <p class="muted" style="margin-top:16px;margin-bottom:0">Authorized staff only.</p>
   </div>
+</div>
 
+<div id="portal-screen" hidden>
+  <header class="admin-top">
+    <div class="admin-top-inner">
+      <div class="brand">Luigi Lindell Construction<small>Staff content management</small></div>
+      <div class="staff-actions"><span id="staff-role" class="role"></span><button id="logout" class="logout">Log out</button></div>
+    </div>
+  </header>
 
-  <!-- ============================================================
-       SUPABASE + EXISTING CLIENT DATA/RENDERING ENGINE
-       ============================================================ -->
+  <div class="portal">
+    <aside class="sidebar">
+      <div class="side-title">Manage</div>
+      <button class="side-btn active" data-page="dashboard">Dashboard</button>
+      <button class="side-btn" data-page="company">Company</button>
+      <button class="side-btn" data-page="reviews">Reviews</button>
+      <button class="side-btn" data-page="testimonials">Testimonial Videos</button>
+      <button class="side-btn" data-page="gallery">Projects &amp; Media</button>
+      <button class="side-btn" data-page="messages">Messages</button>
+    </aside>
+    <main class="main"><div id="main-content" class="main-inner"></div></main>
+  </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<div id="modal-backdrop" class="modal-backdrop" hidden>
+  <div class="modal">
+    <div class="modal-head"><h2 id="modal-title"></h2><button class="close" id="modal-close">×</button></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
 
-  <script src="supabase-client.js"></script>
-  <script src="escape-html.js"></script>
-  <script src="media-pipeline.js"></script>
-  <script src="db-service.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="media-pipeline.js"></script>
 
+<script>
+"use strict";
 
-  <!-- ============================================================
-       STAFF AUTH
-       ============================================================ -->
+var sb = window.LLCSupabase;
+if (!sb || !sb.client) {
+  document.getElementById("login-error").textContent = "Supabase client could not load.";
+  document.getElementById("login-error").hidden = false;
+  throw new Error("supabase-client.js did not expose LLCSupabase");
+}
+var client = sb.client;
+var currentStaff = null;
+var cache = {company:null,hours:[],nav:[],reviews:[],testimonials:[],sections:[],categories:[],projects:[],media:[],conversations:[]};
+var currentPage = "dashboard";
 
-  <script>
-    (function () {
-      "use strict";
+var SECTION_NAMES = {
+  "completed-project-photos":"Completed Project Photos",
+  "completed-project-videos":"Completed Project Videos",
+  "ground-breaking":"Ground Breaking",
+  "exterior-design":"Exterior Design",
+  "interior-design":"Interior Design"
+};
 
-      var sb = window.LLCSupabase;
+function esc(v){
+  return String(v == null ? "" : v).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+function uuid(){return crypto.randomUUID ? crypto.randomUUID() : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){var r=Math.random()*16|0,v=c==="x"?r:(r&3)|8;return v.toString(16);});}
+function msgError(e){return e && e.message ? e.message : "Something went wrong. Please try again.";}
+function can(role){
+  if(role==="admin") return true;
+  if(role==="uploader") return false;
+  if(role==="followup-operator") return false;
+  return false;
+}
+function canGalleryUpload(){return currentStaff && (currentStaff.role==="admin" || currentStaff.role==="uploader");}
+function canReviews(){return currentStaff && currentStaff.role==="admin";}
+function canTestimonials(){return currentStaff && currentStaff.role==="admin";}
+function canCompany(){return currentStaff && currentStaff.role==="admin";}
+function setBusy(btn,busy,label){
+  if(!btn)return;
+  if(busy){btn.dataset.old=btn.textContent;btn.textContent=label||"Saving…";btn.disabled=true;}
+  else{btn.textContent=btn.dataset.old||btn.textContent;btn.disabled=false;}
+}
+function toast(text,ok){
+  var old=document.getElementById("admin-toast");
+  if(old)old.remove();
+  var d=document.createElement("div");
+  d.id="admin-toast";d.textContent=text;
+  d.style.cssText="position:fixed;right:18px;bottom:18px;z-index:200;padding:12px 15px;border-radius:8px;background:"+(ok?"#16703b":"#b42318")+";color:#fff;box-shadow:0 8px 25px #0003;font-size:.88rem";
+  document.body.appendChild(d);setTimeout(function(){d.remove();},3500);
+}
+function showModal(title,html){
+  document.getElementById("modal-title").textContent=title;
+  document.getElementById("modal-body").innerHTML=html;
+  document.getElementById("modal-backdrop").hidden=false;
+}
+function closeModal(){document.getElementById("modal-backdrop").hidden=true;document.getElementById("modal-body").innerHTML="";}
+document.getElementById("modal-close").addEventListener("click",closeModal);
+document.getElementById("modal-backdrop").addEventListener("click",function(e){if(e.target===this)closeModal();});
 
-      if (!sb || !sb.client) {
-        console.error("Supabase client was not loaded.");
-        return;
+async function getStaffRole(){
+  var r=await client.rpc("current_staff_role");
+  if(r.error)throw r.error;
+  return r.data || null;
+}
+async function loadStaff(){
+  var s=await client.auth.getSession();
+  if(s.error)throw s.error;
+  if(!s.data.session)return false;
+  var role=await getStaffRole();
+  if(!role){
+    await client.auth.signOut();
+    throw new Error("This account is not an enabled staff account.");
+  }
+  currentStaff={id:s.data.session.user.id,email:s.data.session.user.email||"",role:role};
+  document.getElementById("staff-role").textContent=role;
+  return true;
+}
+async function loadAll(){
+  var results=await Promise.all([
+    client.from("company_profile").select("*").maybeSingle(),
+    client.from("business_hours").select("*").order("day_of_week"),
+    client.from("client_nav_items").select("*").order("sort_order"),
+    client.from("reviews").select("*").order("sort_order"),
+    client.from("testimonial_videos").select("*").order("sort_order"),
+    client.from("gallery_sections").select("*").order("sort_order"),
+    client.from("gallery_categories").select("*").order("sort_order"),
+    client.from("gallery_projects").select("*").order("sort_order"),
+    client.from("gallery_media").select("*").order("sort_order")
+  ]);
+  results.forEach(function(r){if(r.error)throw r.error;});
+  cache.company=results[0].data;
+  cache.hours=results[1].data||[];
+  cache.nav=results[2].data||[];
+  cache.reviews=results[3].data||[];
+  cache.testimonials=results[4].data||[];
+  cache.sections=results[5].data||[];
+  cache.categories=results[6].data||[];
+  cache.projects=results[7].data||[];
+  cache.media=results[8].data||[];
+}
+
+function pageHead(title,sub){
+  return '<div class="page-head"><div><h1>'+esc(title)+'</h1><p>'+esc(sub)+'</p></div></div>';
+}
+function render(){
+  document.querySelectorAll(".side-btn").forEach(function(b){b.classList.toggle("active",b.dataset.page===currentPage);});
+  var fn={dashboard:renderDashboard,company:renderCompany,reviews:renderReviews,testimonials:renderTestimonials,gallery:renderGallery,messages:renderMessages}[currentPage];
+  document.getElementById("main-content").innerHTML=fn();
+  wirePage();
+}
+function renderDashboard(){
+  return pageHead("Dashboard","Manage the public website content from one place.")+
+  '<div class="stat-grid">'+
+  '<div class="stat"><b>'+cache.projects.length+'</b><span>Projects / albums</span></div>'+
+  '<div class="stat"><b>'+cache.media.length+'</b><span>Media items</span></div>'+
+  '<div class="stat"><b>'+cache.reviews.length+'</b><span>Reviews</span></div></div>'+
+  '<div class="panel"><h2>What you can manage</h2><p class="muted">As '+esc(currentStaff.role)+', this portal writes to the same Supabase content used by the client site.</p>'+
+  '<div class="notice">Changes made here are saved to the database. Clients only receive the published content; they do not receive these editing controls.</div></div>';
+}
+
+function renderCompany(){
+  var c=cache.company||{};
+  if(!canCompany())return pageHead("Company","Your staff role does not have company-edit permission.")+
+    '<div class="panel"><div class="notice">Company editing is restricted to admin.</div></div>';
+  var hours=cache.hours||[];
+  var rows="";
+  for(var i=0;i<7;i++){
+    var h=hours.find(function(x){return Number(x.day_of_week)===i;})||{};
+    rows+='<div class="grid-3" style="margin-bottom:8px"><div class="muted" style="padding-top:10px">'+["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][i]+'</div>'+
+      '<input id="hour-open-'+i+'" type="time" value="'+esc(h.open_time||"")+'">'+
+      '<input id="hour-close-'+i+'" type="time" value="'+esc(h.close_time||"")+'"></div>';
+  }
+  return pageHead("Company","Edit the company identity and business hours.")+
+  '<form id="company-form" class="panel">'+
+  '<h2>Company information</h2><div class="grid-2">'+
+  '<label class="field"><span>Company name</span><input id="company-name-input" value="'+esc(c.name||"")+'" required></label>'+
+  '<label class="field"><span>Mobile</span><input id="company-mobile-input" value="'+esc(c.mobile||"")+'"></label></div>'+
+  '<label class="field"><span>Description</span><textarea id="company-description-input">'+esc(c.description||"")+'</textarea></label>'+
+  '<label class="field"><span>Location</span><input id="company-location-input" value="'+esc(c.location||"")+'"></label>'+
+  '<div class="form-actions"><button class="btn btn-primary" type="submit">Save company</button></div></form>'+
+  '<div class="panel"><h2>Cover and logo</h2><div class="grid-2">'+
+  '<div class="upload-box"><h3>Cover photo</h3><input id="company-cover-file" type="file" accept="image/*"><p class="muted">Uploads to company-assets and creates the display-sized asset.</p><button id="upload-cover" class="btn btn-secondary" type="button">Upload cover</button></div>'+
+  '<div class="upload-box"><h3>Company logo</h3><input id="company-logo-file" type="file" accept="image/*"><p class="muted">Uploads to company-assets.</p><button id="upload-logo" class="btn btn-secondary" type="button">Upload logo</button></div>'+
+  '</div><div id="company-upload-status" class="muted" style="margin-top:10px"></div></div>'+
+  '<div class="panel"><h2>Business hours</h2>'+rows+'<div class="form-actions"><button id="save-hours" class="btn btn-primary" type="button">Save hours</button></div></div>';
+}
+
+function renderReviews(){
+  if(!canReviews())return pageHead("Reviews","Review management is restricted to admin.")+'<div class="panel"><div class="notice">Only admin can add, edit, publish, or delete reviews.</div></div>';
+  var list=cache.reviews.map(function(r){
+    return '<div class="item"><div class="item-head"><div><div class="item-title">'+esc(r.customer_name)+'</div><div class="item-meta">'+esc(r.project_label||"")+' · '+esc(r.date_label||"")+' · '+esc(r.location||"")+'</div></div><span class="role">'+(r.published?"Published":"Hidden")+'</span></div><div class="item-text">'+esc(r.review_text)+'</div><div class="item-actions"><button class="btn btn-secondary edit-review" data-id="'+esc(r.id)+'">Edit</button><button class="btn btn-danger delete-review" data-id="'+esc(r.id)+'">Delete</button></div></div>';
+  }).join("");
+  return pageHead("Reviews","Type and save customer reviews/testimonials.")+
+  '<div class="panel"><div class="form-actions" style="margin-top:0"><button id="new-review" class="btn btn-primary" type="button">+ Add review</button></div></div>'+
+  '<div class="list">'+(list||'<div class="empty">No reviews yet.</div>')+'</div>';
+}
+
+function reviewForm(r){
+  r=r||{};
+  return '<form id="review-form">'+
+  '<input type="hidden" id="review-id" value="'+esc(r.id||"")+'">'+
+  '<label class="field"><span>Customer name</span><input id="review-customer" value="'+esc(r.customer_name||"")+'" required></label>'+
+  '<label class="field"><span>Review / testimonial text</span><textarea id="review-text" required>'+esc(r.review_text||"")+'</textarea></label>'+
+  '<div class="grid-2"><label class="field"><span>Project</span><input id="review-project" value="'+esc(r.project_label||"")+'"></label><label class="field"><span>Location</span><input id="review-location" value="'+esc(r.location||"")+'"></label></div>'+
+  '<div class="grid-2"><label class="field"><span>Date label</span><input id="review-date" value="'+esc(r.date_label||"")+'"></label><label class="field"><span>Sort order</span><input id="review-order" type="number" value="'+esc(r.sort_order==null?0:r.sort_order)+'"></label></div>'+
+  '<label class="checkbox"><input id="review-published" type="checkbox" '+(r.published!==false?"checked":"")+'> Published</label>'+
+  '<div class="upload-box" style="margin-top:14px"><b>Customer photo (optional)</b><input id="review-photo" type="file" accept="image/*" style="display:block;margin-top:8px"><div id="review-upload-status" class="muted"></div></div>'+
+  '<div class="form-actions"><button class="btn btn-primary" type="submit">Save review</button><button id="cancel-review" class="btn btn-secondary" type="button">Cancel</button></div></form>';
+}
+
+function renderTestimonials(){
+  if(!canTestimonials())return pageHead("Testimonial Videos","Testimonial video management is restricted to admin.")+'<div class="panel"><div class="notice">Only admin can add, edit, publish, or delete testimonial videos.</div></div>';
+  var list=cache.testimonials.map(function(t){
+    return '<div class="item"><div class="item-head"><div><div class="item-title">'+esc(t.title)+'</div><div class="item-meta">'+esc(t.customer_name||"")+' · '+esc(t.project_label||"")+' · '+esc(t.date_label||"")+'</div></div><span class="role">'+(t.published?"Published":"Hidden")+'</span></div><div class="item-text">'+esc(t.description||"")+'</div><div class="item-actions"><button class="btn btn-secondary edit-testimonial" data-id="'+esc(t.id)+'">Edit</button><button class="btn btn-danger delete-testimonial" data-id="'+esc(t.id)+'">Delete</button></div></div>';
+  }).join("");
+  return pageHead("Testimonial Videos","Upload the actual video and type its customer details.")+
+  '<div class="panel"><div class="form-actions" style="margin-top:0"><button id="new-testimonial" class="btn btn-primary" type="button">+ Add testimonial video</button></div></div>'+
+  '<div class="list">'+(list||'<div class="empty">No testimonial videos yet.</div>')+'</div>';
+}
+
+function testimonialForm(t){
+  t=t||{};
+  return '<form id="testimonial-form"><input type="hidden" id="test-id" value="'+esc(t.id||"")+'">'+
+  '<div class="grid-2"><label class="field"><span>Title</span><input id="test-title" value="'+esc(t.title||"")+'" required></label><label class="field"><span>Customer name</span><input id="test-customer" value="'+esc(t.customer_name||"")+'"></label></div>'+
+  '<label class="field"><span>Description</span><textarea id="test-description">'+esc(t.description||"")+'</textarea></label>'+
+  '<div class="grid-3"><label class="field"><span>Project</span><input id="test-project" value="'+esc(t.project_label||"")+'"></label><label class="field"><span>Date label</span><input id="test-date" value="'+esc(t.date_label||"")+'"></label><label class="field"><span>Sort order</span><input id="test-order" type="number" value="'+esc(t.sort_order==null?0:t.sort_order)+'"></label></div>'+
+  '<label class="checkbox"><input id="test-published" type="checkbox" '+(t.published!==false?"checked":"")+'> Published</label>'+
+  '<div class="upload-box" style="margin-top:14px"><b>Video</b><input id="test-video" type="file" accept="video/*,.mp4,.mov,.webm" style="display:block;margin-top:8px"><div id="test-upload-status" class="muted"></div><div class="progress"><i id="test-progress"></i></div></div>'+
+  '<div class="form-actions"><button class="btn btn-primary" type="submit">Save testimonial</button><button id="cancel-testimonial" class="btn btn-secondary" type="button">Cancel</button></div></form>';
+}
+
+function renderGallery(){
+  var uploadAllowed=canGalleryUpload();
+  var sections=cache.sections.map(function(s){return '<option value="'+esc(s.id)+'">'+esc(SECTION_NAMES[s.section_key]||s.section_key)+'</option>';}).join("");
+  var cats=cache.categories.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>';}).join("");
+  var projects=cache.projects.map(function(p){return '<option value="'+esc(p.id)+'">'+esc(p.name)+'</option>';}).join("");
+  var rows=cache.projects.map(function(p){
+    var c=cache.categories.find(function(x){return x.id===p.category_id;});
+    var media=cache.media.filter(function(m){return m.project_id===p.id;});
+    var mediaHtml=media.map(function(m){
+      return '<div class="media-row" style="margin-top:9px">'+
+        (m.thumbnail_path?'<img class="thumb" src="'+esc(m.thumbnail_path)+'" alt="">':'<div class="thumb" style="display:grid;place-items:center;font-size:.7rem">'+esc(m.media_type||"media")+'</div>')+
+        '<div style="flex:1"><div class="item-meta">'+esc(m.media_type||"media")+' · '+esc(m.caption||"No caption")+'</div>'+
+        (canGalleryUpload()?'<button class="btn btn-danger delete-media" data-id="'+esc(m.id)+'" type="button" style="margin-top:6px">Remove media</button>':'')+
+        '</div></div>';
+    }).join("");
+    return '<div class="item"><div class="item-head"><div><div class="item-title">'+esc(p.name)+'</div><div class="item-meta">'+esc(c?c.name:"")+' · '+media.length+' media</div></div></div><div class="item-text">'+esc(p.description||"")+'</div>'+
+      (mediaHtml||'<div class="muted" style="margin-top:10px">No media uploaded yet.</div>')+
+      '<div class="item-actions"><button class="btn btn-secondary edit-project" data-id="'+esc(p.id)+'">Edit</button>'+
+      (uploadAllowed?'<button class="btn btn-primary add-media" data-id="'+esc(p.id)+'">Upload media</button>':'')+
+      '<button class="btn btn-danger delete-project" data-id="'+esc(p.id)+'">Delete</button></div></div>';
+  }).join("");
+  return pageHead("Projects & Media","Create albums, upload photos/videos, edit captions, and remove media.")+
+  '<div class="grid-2">'+
+  '<div class="panel"><h2>New category</h2><form id="category-form"><label class="field"><span>Gallery section</span><select id="cat-section">'+sections+'</select></label><label class="field"><span>Category name</span><input id="cat-name" required></label><label class="field"><span>Slug</span><input id="cat-slug" required></label><div class="form-actions"><button class="btn btn-primary" type="submit">Create category</button></div></form></div>'+
+  '<div class="panel"><h2>New project / album</h2><form id="project-form"><label class="field"><span>Category</span><select id="project-category">'+cats+'</select></label><label class="field"><span>Project name</span><input id="project-name" required></label><label class="field"><span>Description</span><textarea id="project-description"></textarea></label><div class="form-actions"><button class="btn btn-primary" type="submit">Create project</button></div></form></div></div>'+
+  '<div class="panel"><h2>Upload media</h2><div class="grid-2"><label class="field"><span>Project / album</span><select id="upload-project">'+projects+'</select></label><label class="field"><span>Photos or videos</span><input id="gallery-files" type="file" multiple accept="image/*,video/*"></label></div><div id="gallery-upload-status" class="muted"></div><div class="progress"><i id="gallery-progress"></i></div><div class="form-actions"><button id="upload-gallery" class="btn btn-primary" type="button" '+(uploadAllowed?"":"disabled")+'>Upload selected media</button></div></div>'+
+  '<div class="panel"><h2>Projects</h2><div class="list">'+(rows||'<div class="empty">No projects yet.</div>')+'</div></div>';
+}
+
+function projectForm(p){
+  p=p||{};
+  var cats=cache.categories.map(function(c){return '<option value="'+esc(c.id)+'" '+(c.id===p.category_id?"selected":"")+'>'+esc(c.name)+'</option>';}).join("");
+  return '<form id="project-edit-form"><input type="hidden" id="edit-project-id" value="'+esc(p.id||"")+'"><label class="field"><span>Category</span><select id="edit-project-category">'+cats+'</select></label><label class="field"><span>Name</span><input id="edit-project-name" value="'+esc(p.name||"")+'" required></label><label class="field"><span>Description</span><textarea id="edit-project-description">'+esc(p.description||"")+'</textarea></label><label class="checkbox"><input id="edit-project-published" type="checkbox" '+(p.published!==false?"checked":"")+'> Published</label><div class="form-actions"><button class="btn btn-primary" type="submit">Save project</button><button id="cancel-project" class="btn btn-secondary" type="button">Cancel</button></div></form>';
+}
+
+function renderMessages(){
+  return pageHead("Messages","Staff replies use the existing conversation system.")+
+  '<div class="panel"><div class="notice">Message administration uses the existing chat tables and RLS. The content editor is ready for company, reviews, testimonials, and gallery media first.</div><p class="muted">If you need the full multi-client conversation inbox here, it can be connected without changing the client chat UI.</p></div>';
+}
+
+async function saveCompany(e){
+  e.preventDefault();
+  var b=e.target.querySelector("button[type=submit]");setBusy(b,true,"Saving…");
+  try{
+    var patch={name:document.getElementById("company-name-input").value.trim(),description:document.getElementById("company-description-input").value.trim(),location:document.getElementById("company-location-input").value.trim(),mobile:document.getElementById("company-mobile-input").value.trim()};
+    var r=cache.company && cache.company.id
+      ? await client.from("company_profile").update(patch).eq("id",cache.company.id)
+      : await client.from("company_profile").insert(Object.assign({id:uuid()},patch));
+    if(r.error)throw r.error;
+    await loadAll();toast("Company saved.",true);render();
+  }catch(err){toast(msgError(err),false);}finally{setBusy(b,false);}
+}
+async function saveHours(){
+  try{
+    for(var i=0;i<7;i++){
+      var open=document.getElementById("hour-open-"+i).value||null,close=document.getElementById("hour-close-"+i).value||null;
+      var existing=cache.hours.find(function(h){return Number(h.day_of_week)===i;});
+      if(existing){
+        var r=await client.from("business_hours").update({open_time:open,close_time:close}).eq("id",existing.id);
+        if(r.error)throw r.error;
+      }else{
+        var r2=await client.from("business_hours").insert({day_of_week:i,open_time:open,close_time:close,chat_available:true});
+        if(r2.error)throw r2.error;
       }
-
-      var client = sb.client;
-
-      var staffLogin = document.getElementById("staff-login");
-      var staffArea = document.getElementById("staff-area");
-      var staffForm = document.getElementById("staff-login-form");
-      var staffEmail = document.getElementById("staff-email");
-      var staffPassword = document.getElementById("staff-password");
-      var staffLoginButton = document.getElementById("staff-login-button");
-      var staffLoginError = document.getElementById("staff-login-error");
-
-      var staffUserLabel = document.getElementById("staff-user-label");
-      var staffRoleBadge = document.getElementById("staff-role-badge");
-
-      var staffEditor = document.getElementById("staff-editor");
-      var staffEditorMessage = document.getElementById("staff-editor-message");
-
-      var currentStaff = null;
-
-
-      function setLoginError(message) {
-        if (!message) {
-          staffLoginError.hidden = true;
-          staffLoginError.textContent = "";
-          return;
-        }
-
-        staffLoginError.hidden = false;
-        staffLoginError.textContent = message;
-      }
-
-
-      function setEditorMessage(message) {
-        staffEditorMessage.textContent = message || "";
-      }
-
-
-      function roleLabel(role) {
-        if (role === "admin") return "Administrator";
-        if (role === "uploader") return "Uploader";
-        if (role === "followup-operator") return "Follow-up";
-        if (role === "design-operator") return "Design";
-        return "Staff";
-      }
-
-
-      /*
-       * Database-authoritative staff authorization.
-       *
-       * current_staff_role() is the same function already used by the
-       * working Staff Portal. The browser never decides whether someone
-       * is staff merely from their email address.
-       */
-      async function getStaffRole() {
-        var result = await client.rpc("current_staff_role");
-
-        if (result.error) {
-          throw result.error;
-        }
-
-        return result.data || null;
-      }
-
-
-      async function loadStaffSession() {
-        var sessionResult = await client.auth.getSession();
-
-        if (sessionResult.error) {
-          throw sessionResult.error;
-        }
-
-        var session =
-          sessionResult.data &&
-          sessionResult.data.session
-            ? sessionResult.data.session
-            : null;
-
-        if (!session || !session.user) {
-          showLogin();
-          return;
-        }
-
-        var role = await getStaffRole();
-
-        if (!role) {
-          await client.auth.signOut();
-          showLogin();
-          setLoginError(
-            "This account is not authorized for the staff portal."
-          );
-          return;
-        }
-
-        currentStaff = {
-          id: session.user.id,
-          email: session.user.email || "",
-          role: role
-        };
-
-        showStaff();
-      }
-
-
-      async function loadClientDashboard() {
-        /*
-         * db-service.js creates SITE_DATA in the exact structure expected
-         * by app.js. We deliberately wait for the staff session first.
-         */
-        await window.LLCDataService.load();
-
-        /*
-         * app.js captures window.SITE_DATA when it is parsed, so it must
-         * be injected only AFTER the data has been loaded.
-         */
-        await new Promise(function (resolve, reject) {
-          var script = document.createElement("script");
-
-          script.src = "app.js";
-
-          script.onload = resolve;
-          script.onerror = function () {
-            reject(
-              new Error("The client dashboard renderer could not be loaded.")
-            );
-          };
-
-          document.body.appendChild(script);
-        });
-
-        if (
-          window.LLCApp &&
-          typeof window.LLCApp.showApp === "function"
-        ) {
-          window.LLCApp.showApp();
-        } else {
-          throw new Error("Client dashboard renderer did not initialize.");
-        }
-      }
-
-
-      function showLogin() {
-        staffArea.hidden = true;
-        staffLogin.hidden = false;
-        currentStaff = null;
-      }
-
-
-      async function showStaff() {
-        staffLogin.hidden = true;
-        staffArea.hidden = false;
-
-        staffUserLabel.textContent =
-          currentStaff.email || "Staff";
-
-        staffRoleBadge.textContent =
-          roleLabel(currentStaff.role);
-
-        staffEditor.hidden = false;
-
-        setEditorMessage(
-          "Loading the shared client dashboard…"
-        );
-
-        try {
-          await loadClientDashboard();
-
-          setEditorMessage(
-            "Shared client dashboard loaded. Editing controls are ready for the next phase."
-          );
-        } catch (error) {
-          console.error(error);
-
-          setEditorMessage(
-            "The staff session is valid, but the dashboard could not be loaded."
-          );
-        }
-      }
-
-
-      staffForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        setLoginError("");
-
-        var email = staffEmail.value.trim();
-        var password = staffPassword.value;
-
-        if (!email || !password) {
-          setLoginError("Enter your email and password.");
-          return;
-        }
-
-        staffLoginButton.disabled = true;
-        staffLoginButton.textContent = "Signing in…";
-
-        try {
-          var result = await client.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
-
-          if (result.error) {
-            throw result.error;
-          }
-
-          var role = await getStaffRole();
-
-          if (!role) {
-            await client.auth.signOut();
-            throw new Error(
-              "This account is not authorized for the staff portal."
-            );
-          }
-
-          currentStaff = {
-            id: result.data.user.id,
-            email: result.data.user.email || email,
-            role: role
-          };
-
-          await showStaff();
-
-        } catch (error) {
-          console.error(error);
-
-          setLoginError(
-            error && error.message
-              ? error.message
-              : "Sign-in failed. Please try again."
-          );
-
-        } finally {
-          staffLoginButton.disabled = false;
-          staffLoginButton.textContent = "Sign in";
-        }
-      });
-
-
-      document
-        .getElementById("staff-logout")
-        .addEventListener("click", async function () {
-          await client.auth.signOut();
-          window.location.reload();
-        });
-
-
-      document
-        .getElementById("staff-refresh")
-        .addEventListener("click", function () {
-          window.location.reload();
-        });
-
-
-      document
-        .getElementById("staff-edit-toggle")
-        .addEventListener("click", function () {
-          var hidden = staffEditor.hidden;
-          staffEditor.hidden = !hidden;
-
-          setEditorMessage(
-            staffEditor.hidden
-              ? ""
-              : "Editing controls are visible."
-          );
-        });
-
-
-      document
-        .getElementById("staff-add-content")
-        .addEventListener("click", function () {
-          setEditorMessage(
-            "Add-content controls will be connected to the Supabase gallery records next."
-          );
-        });
-
-
-      document
-        .getElementById("staff-save")
-        .addEventListener("click", function () {
-          setEditorMessage(
-            "Save is reserved for the database editing phase so no client data can be accidentally overwritten."
-          );
-        });
-
-
-      document
-        .getElementById("staff-remove")
-        .addEventListener("click", function () {
-          setEditorMessage(
-            "Remove is reserved for the database editing phase so deletion is performed against the correct record and storage object."
-          );
-        });
-
-
-      client.auth.onAuthStateChange(function (event) {
-        if (event === "SIGNED_OUT") {
-          showLogin();
-        }
-      });
-
-
-      loadStaffSession().catch(function (error) {
-        console.error(error);
-        showLogin();
-
-        setLoginError(
-          "We couldn't load the staff session. Please refresh and try again."
-        );
-      });
-
-    })();
-  </script>
-
+    }
+    await loadAll();toast("Business hours saved.",true);render();
+  }catch(err){toast(msgError(err),false);}
+}
+async function uploadCompany(kind){
+  var id=kind==="cover"?"company-cover-file":"company-logo-file",file=document.getElementById(id).files[0];
+  if(!file){toast("Choose an image first.",false);return;}
+  var status=document.getElementById("company-upload-status");status.textContent="Uploading…";
+  try{
+    var result=await window.LLCMedia.uploadDisplayAsset(file,kind==="cover"?"company-cover":"company-logo",function(s){status.textContent=s;});
+    var patch=kind==="cover"?{cover_image_path:result.path}:{profile_image_path:result.path};
+    var r=cache.company && cache.company.id
+      ? await client.from("company_profile").update(patch).eq("id",cache.company.id)
+      : await client.from("company_profile").insert(Object.assign({id:uuid()},patch));
+    if(r.error)throw r.error;
+    await loadAll();status.textContent="Saved.";toast("Company "+kind+" uploaded and saved.",true);render();
+  }catch(err){status.textContent="";toast(msgError(err),false);}
+}
+function openReview(r){
+  showModal(r?"Edit review":"Add review",reviewForm(r));
+  document.getElementById("review-form").addEventListener("submit",saveReview);
+  document.getElementById("cancel-review").addEventListener("click",closeModal);
+}
+async function saveReview(e){
+  e.preventDefault();var b=e.target.querySelector("button[type=submit]");setBusy(b,true,"Saving…");
+  try{
+    var id=document.getElementById("review-id").value;
+    var patch={customer_name:document.getElementById("review-customer").value.trim(),review_text:document.getElementById("review-text").value.trim(),project_label:document.getElementById("review-project").value.trim()||null,location:document.getElementById("review-location").value.trim()||null,date_label:document.getElementById("review-date").value.trim()||null,sort_order:Number(document.getElementById("review-order").value||0),published:document.getElementById("review-published").checked};
+    var file=document.getElementById("review-photo").files[0];
+    if(file){
+      var status=document.getElementById("review-upload-status");status.textContent="Uploading photo…";
+      var asset=await window.LLCMedia.uploadDisplayAsset(file,"review-photo",function(s){status.textContent=s;});
+      patch.customer_photo_path=asset.path;
+    }
+    var r=id?await client.from("reviews").update(patch).eq("id",id):await client.from("reviews").insert(Object.assign({id:uuid()},patch));
+    if(r.error)throw r.error;
+    await loadAll();closeModal();toast("Review saved.",true);render();
+  }catch(err){toast(msgError(err),false);}finally{setBusy(b,false);}
+}
+async function deleteReview(id){
+  if(!confirm("Delete this review?"))return;
+  try{var r=await client.from("reviews").delete().eq("id",id);if(r.error)throw r.error;await loadAll();toast("Review deleted.",true);render();}catch(e){toast(msgError(e),false);}
+}
+function openTestimonial(t){
+  showModal(t?"Edit testimonial video":"Add testimonial video",testimonialForm(t));
+  document.getElementById("testimonial-form").addEventListener("submit",saveTestimonial);
+  document.getElementById("cancel-testimonial").addEventListener("click",closeModal);
+}
+async function saveTestimonial(e){
+  e.preventDefault();var b=e.target.querySelector("button[type=submit]");setBusy(b,true,"Saving…");
+  try{
+    var id=document.getElementById("test-id").value, file=document.getElementById("test-video").files[0], videoPath=null;
+    var patch={title:document.getElementById("test-title").value.trim(),description:document.getElementById("test-description").value.trim()||null,customer_name:document.getElementById("test-customer").value.trim()||null,project_label:document.getElementById("test-project").value.trim()||null,date_label:document.getElementById("test-date").value.trim()||null,sort_order:Number(document.getElementById("test-order").value||0),published:document.getElementById("test-published").checked};
+    if(file){
+      var status=document.getElementById("test-upload-status"),bar=document.getElementById("test-progress");status.textContent="Uploading video…";
+      var videoId=uuid();
+      var ext=(file.name.match(/(\\.[a-z0-9]+)$/i)||["",".mp4"])[1].toLowerCase();
+      videoPath="testimonials/"+videoId+ext;
+      status.textContent="Uploading video…";
+      var uploadRes=await client.storage.from("testimonial-videos").upload(videoPath,file,{contentType:file.type||"video/mp4",upsert:false});
+      if(uploadRes.error)throw uploadRes.error;
+      patch.video_path=videoPath;
+      patch.thumbnail_path=null;
+    }else if(!id){throw new Error("Choose a video file.");}
+    var r=id?await client.from("testimonial_videos").update(patch).eq("id",id):await client.from("testimonial_videos").insert(Object.assign({id:uuid()},patch));
+    if(r.error)throw r.error;
+    await loadAll();closeModal();toast("Testimonial video saved.",true);render();
+  }catch(err){toast(msgError(err),false);}finally{setBusy(b,false);}
+}
+async function deleteTestimonial(id){
+  if(!confirm("Delete this testimonial video record?"))return;
+  try{var r=await client.from("testimonial_videos").delete().eq("id",id);if(r.error)throw r.error;await loadAll();toast("Testimonial deleted.",true);render();}catch(e){toast(msgError(e),false);}
+}
+async function createCategory(e){
+  e.preventDefault();var b=e.target.querySelector("button");setBusy(b,true,"Creating…");
+  try{
+    var section=document.getElementById("cat-section").value,name=document.getElementById("cat-name").value.trim(),slug=document.getElementById("cat-slug").value.trim();
+    if(!section||!name||!slug)throw new Error("Section, category name, and slug are required.");
+    var r=await client.from("gallery_categories").insert({id:uuid(),section_id:section,name:name,slug:slug,published:true,sort_order:cache.categories.length});
+    if(r.error)throw r.error;await loadAll();toast("Category created.",true);render();
+  }catch(err){toast(msgError(err),false);}finally{setBusy(b,false);}
+}
+async function createProject(e){
+  e.preventDefault();var b=e.target.querySelector("button");setBusy(b,true,"Creating…");
+  try{
+    var r=await client.from("gallery_projects").insert({id:uuid(),category_id:document.getElementById("project-category").value,name:document.getElementById("project-name").value.trim(),description:document.getElementById("project-description").value.trim()||null,published:true,sort_order:cache.projects.length});
+    if(r.error)throw r.error;await loadAll();toast("Project created.",true);render();
+  }catch(err){toast(msgError(err),false);}finally{setBusy(b,false);}
+}
+function openProject(p){
+  showModal("Edit project / album",projectForm(p));
+  document.getElementById("project-edit-form").addEventListener("submit",async function(e){
+    e.preventDefault();var b=e.target.querySelector("button");setBusy(b,true,"Saving…");
+    try{
+      var id=document.getElementById("edit-project-id").value;
+      var r=await client.from("gallery_projects").update({category_id:document.getElementById("edit-project-category").value,name:document.getElementById("edit-project-name").value.trim(),description:document.getElementById("edit-project-description").value.trim()||null,published:document.getElementById("edit-project-published").checked}).eq("id",id);
+      if(r.error)throw r.error;await loadAll();closeModal();toast("Project saved.",true);render();
+    }catch(err){toast(msgError(err),false);}finally{setBusy(b,false);}
+  });
+  document.getElementById("cancel-project").addEventListener("click",closeModal);
+}
+async function uploadGallery(){
+  if(!canGalleryUpload()){toast("Your staff role cannot upload gallery media.",false);return;}
+  var files=Array.from(document.getElementById("gallery-files").files||[]),projectId=document.getElementById("upload-project").value;
+  if(!files.length||!projectId){toast("Choose a project and at least one file.",false);return;}
+  var status=document.getElementById("gallery-upload-status"),bar=document.getElementById("gallery-progress"),button=document.getElementById("upload-gallery");
+  setBusy(button,true,"Uploading…");
+  try{
+    for(var i=0;i<files.length;i++){
+      status.textContent="Uploading "+(i+1)+" of "+files.length+": "+files[i].name;
+      var asset=await window.LLCMedia.uploadBusinessMedia(files[i],projectId,function(s){status.textContent=s;});
+      var row={id:uuid(),project_id:projectId,storage_path:asset.storagePath,display_path:asset.displayPath||null,thumbnail_path:asset.thumbnailPath||null,media_type:asset.mediaType,size_bytes:asset.sizeBytes,caption:null,published:true,sort_order:cache.media.length+i};
+      var r=await client.from("gallery_media").insert(row);if(r.error)throw r.error;
+      bar.style.width=Math.round(((i+1)/files.length)*100)+"%";
+    }
+    await loadAll();toast(files.length+" media item(s) uploaded and saved.",true);render();
+  }catch(err){toast(msgError(err),false);}finally{setBusy(button,false);setTimeout(function(){bar.style.width="0";},500);}
+}
+async function deleteProject(id){
+  if(!confirm("Delete this project and its media records?"))return;
+  try{
+    var r=await client.from("gallery_projects").delete().eq("id",id);if(r.error)throw r.error;
+    await loadAll();toast("Project deleted.",true);render();
+  }catch(e){toast(msgError(e),false);}
+}
+async function deleteMedia(id){
+  if(!confirm("Delete this media item?"))return;
+  try{var r=await client.from("gallery_media").delete().eq("id",id);if(r.error)throw r.error;await loadAll();render();}catch(e){toast(msgError(e),false);}
+}
+function wirePage(){
+  var el;
+  el=document.getElementById("company-form");if(el)el.addEventListener("submit",saveCompany);
+  el=document.getElementById("save-hours");if(el)el.addEventListener("click",saveHours);
+  el=document.getElementById("upload-cover");if(el)el.addEventListener("click",function(){uploadCompany("cover");});
+  el=document.getElementById("upload-logo");if(el)el.addEventListener("click",function(){uploadCompany("logo");});
+  el=document.getElementById("new-review");if(el)el.addEventListener("click",function(){openReview(null);});
+  document.querySelectorAll(".edit-review").forEach(function(b){b.addEventListener("click",function(){openReview(cache.reviews.find(function(r){return r.id===b.dataset.id;}));});});
+  document.querySelectorAll(".delete-review").forEach(function(b){b.addEventListener("click",function(){deleteReview(b.dataset.id);});});
+  el=document.getElementById("new-testimonial");if(el)el.addEventListener("click",function(){openTestimonial(null);});
+  document.querySelectorAll(".edit-testimonial").forEach(function(b){b.addEventListener("click",function(){openTestimonial(cache.testimonials.find(function(t){return t.id===b.dataset.id;}));});});
+  document.querySelectorAll(".delete-testimonial").forEach(function(b){b.addEventListener("click",function(){deleteTestimonial(b.dataset.id);});});
+  el=document.getElementById("category-form");if(el)el.addEventListener("submit",createCategory);
+  el=document.getElementById("project-form");if(el)el.addEventListener("submit",createProject);
+  document.querySelectorAll(".edit-project").forEach(function(b){b.addEventListener("click",function(){openProject(cache.projects.find(function(p){return p.id===b.dataset.id;}));});});
+  document.querySelectorAll(".delete-project").forEach(function(b){b.addEventListener("click",function(){deleteProject(b.dataset.id);});});
+  document.querySelectorAll(".delete-media").forEach(function(b){b.addEventListener("click",function(){deleteMedia(b.dataset.id);});});
+  document.querySelectorAll(".add-media").forEach(function(b){b.addEventListener("click",function(){document.getElementById("upload-project").value=b.dataset.id;document.getElementById("gallery-files").click();});});
+  el=document.getElementById("upload-gallery");if(el)el.addEventListener("click",uploadGallery);
+}
+document.querySelectorAll(".side-btn").forEach(function(b){b.addEventListener("click",function(){currentPage=b.dataset.page;render();});});
+document.getElementById("logout").addEventListener("click",async function(){await client.auth.signOut();location.reload();});
+document.getElementById("login-form").addEventListener("submit",async function(e){
+  e.preventDefault();var button=document.getElementById("login-button"),error=document.getElementById("login-error");error.hidden=true;setBusy(button,true,"Signing in…");
+  try{
+    var r=await client.auth.signInWithPassword({email:document.getElementById("login-email").value.trim(),password:document.getElementById("login-password").value});
+    if(r.error)throw r.error;
+    await loadStaff();await loadAll();
+    document.getElementById("login-screen").hidden=true;document.getElementById("portal-screen").hidden=false;render();
+  }catch(err){error.textContent=msgError(err);error.hidden=false;}finally{setBusy(button,false);}
+});
+(async function init(){
+  try{
+    var ok=await loadStaff();
+    if(ok){await loadAll();document.getElementById("login-screen").hidden=true;document.getElementById("portal-screen").hidden=false;render();}
+  }catch(e){
+    document.getElementById("login-error").textContent=msgError(e);
+    document.getElementById("login-error").hidden=false;
+  }
+})();
+</script>
 </body>
 </html>
