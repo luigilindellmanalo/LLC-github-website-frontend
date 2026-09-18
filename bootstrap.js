@@ -30,7 +30,7 @@
 
     appLoading = new Promise(function (resolve, reject) {
       var s = document.createElement("script");
-      s.src = "js/app.js";
+      s.src = "app.js";
       s.onload = function () { appLoaded = true; resolve(); };
       s.onerror = function () { reject(new Error("Could not load app.js")); };
       document.body.appendChild(s);
@@ -43,7 +43,7 @@
     if (!window.LLCSupabase.isConfigured()) {
       return Promise.reject(new Error(
         "Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY " +
-        "in js/supabase-client.js before running the site."
+        "in supabase-client.js before running the site."
       ));
     }
 
