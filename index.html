@@ -8,13 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
 <!-- ============================================================
      APP SHELL — all public company content. Hidden until the
-     visitor is logged in (see js/auth.js + js/app.js showApp/hideApp).
+     visitor is logged in (see auth.js + app.js showApp/hideApp).
      There is no "browse as guest" — see auth-modal below.
      ============================================================ -->
 <div id="app-shell" hidden>
@@ -150,7 +150,7 @@
 <!-- ============================================================
      SIGN-IN GATE — the first and only thing a visitor sees before
      logging in. Not a dismissible popup: no close button, no
-     backdrop-click-to-dismiss. See js/auth.js.
+     backdrop-click-to-dismiss. See auth.js.
      ============================================================ -->
 <div id="auth-modal" class="auth-modal auth-gate" hidden>
   <div class="auth-modal__backdrop"></div>
@@ -290,21 +290,21 @@
 
      app.js line 13 captures window.SITE_DATA at parse time, and the
      content cannot be fetched until someone has signed in (every table
-     is behind the login gate). So app.js is NOT loaded here — bootstrap
-     injects it after sign-in, once the content exists. That leaves
-     app.js line 13 and its rendering engine untouched.
+     is behind the login gate). So app.js is NOT loaded here —
+     bootstrap injects it after sign-in, once the content exists. That
+     leaves app.js line 13 and its rendering engine untouched.
      ========================================================= -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 
-<script src="js/supabase-client.js"></script>
-<script src="js/escape-html.js"></script>
-<script src="js/signed-urls.js"></script>
-<script src="js/media-pipeline.js"></script>
-<script src="js/db-service.js"></script>
-<script src="js/auth-service.js"></script>
-<script src="js/chat-service.js"></script>
-<script src="js/archived-state.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/auth.js"></script>
+<script src="supabase-client.js"></script>
+<script src="escape-html.js"></script>
+<script src="signed-urls.js"></script>
+<script src="media-pipeline.js"></script>
+<script src="db-service.js"></script>
+<script src="auth-service.js"></script>
+<script src="chat-service.js"></script>
+<script src="archived-state.js"></script>
+<script src="bootstrap.js"></script>
+<script src="auth.js"></script>
 </body>
 </html>
