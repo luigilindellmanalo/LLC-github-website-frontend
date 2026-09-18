@@ -1,134 +1,943 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Luigi Lindell Construction — Admin</title>
-<meta name="robots" content="noindex, nofollow" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Luigi Lindell Construction — Staff</title>
+  <meta name="robots" content="noindex, nofollow" />
 
-<link rel="stylesheet" href="css/admin.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- SAME VISUAL SYSTEM AS THE CLIENT SITE -->
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ============================================================
+       STAFF LOGIN
+       ============================================================ */
+
+    body {
+      margin: 0;
+      background: var(--concrete, #eceae4);
+      color: var(--ink, #171b1f);
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .staff-login {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    .staff-login__card {
+      width: min(100%, 440px);
+      background: #fff;
+      border: 1px solid rgba(23, 27, 31, 0.10);
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: 0 18px 55px rgba(23, 27, 31, 0.12);
+      box-sizing: border-box;
+    }
+
+    .staff-login__eyebrow {
+      margin: 0 0 8px;
+      font: 700 12px/1.2 "Space Grotesk", sans-serif;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--amber, #e2a610);
+    }
+
+    .staff-login__title {
+      margin: 0;
+      font: 700 28px/1.1 "Space Grotesk", sans-serif;
+      color: var(--steel-dark, #1a3346);
+    }
+
+    .staff-login__sub {
+      margin: 10px 0 24px;
+      font: 400 14px/1.55 Inter, sans-serif;
+      color: var(--slate, #4b5760);
+    }
+
+    .staff-field {
+      display: block;
+      margin: 0 0 16px;
+      font: 600 13px/1.3 Inter, sans-serif;
+      color: var(--ink, #171b1f);
+    }
+
+    .staff-field span {
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .staff-field input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #cbd1d5;
+      border-radius: 10px;
+      padding: 12px 13px;
+      background: #fff;
+      color: var(--ink, #171b1f);
+      font: 400 15px/1.3 Inter, sans-serif;
+      outline: none;
+    }
+
+    .staff-field input:focus {
+      border-color: var(--steel, #24435c);
+      box-shadow: 0 0 0 3px rgba(36, 67, 92, .10);
+    }
+
+    .staff-login__button {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 13px 16px;
+      background: var(--steel-dark, #1a3346);
+      color: #fff;
+      cursor: pointer;
+      font: 700 14px/1.2 "Space Grotesk", sans-serif;
+    }
+
+    .staff-login__button:hover {
+      opacity: .94;
+    }
+
+    .staff-login__button:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .staff-login__error {
+      margin: 0 0 16px;
+      padding: 11px 12px;
+      border-radius: 9px;
+      background: #fff1f1;
+      border: 1px solid #e6bcbc;
+      color: #8a2222;
+      font: 500 13px/1.45 Inter, sans-serif;
+    }
+
+    /* ============================================================
+       STAFF CONTROL BAR
+       ============================================================ */
+
+    .staff-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--steel-dark, #1a3346);
+      color: #fff;
+      border-bottom: 3px solid var(--amber, #e2a610);
+    }
+
+    .staff-bar__inner {
+      width: min(100% - 28px, 1120px);
+      margin: 0 auto;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-sizing: border-box;
+    }
+
+    .staff-bar__identity {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font: 600 13px/1.2 Inter, sans-serif;
+    }
+
+    .staff-bar__badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      font: 700 11px/1 "Space Grotesk", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      white-space: nowrap;
+    }
+
+    .staff-bar__status {
+      color: rgba(255,255,255,.75);
+      font-size: 12px;
+    }
+
+    .staff-bar__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .staff-bar__button {
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 8px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      cursor: pointer;
+      font: 600 12px/1.2 Inter, sans-serif;
+    }
+
+    .staff-bar__button:hover {
+      background: rgba(255,255,255,.15);
+    }
+
+    .staff-bar__button--edit {
+      background: var(--amber, #e2a610);
+      border-color: var(--amber, #e2a610);
+      color: #171b1f;
+    }
+
+    /* ============================================================
+       STAFF EDITING AREA
+       ============================================================ */
+
+    .staff-editor {
+      width: min(100% - 28px, 1120px);
+      margin: 14px auto 0;
+      padding: 14px 16px;
+      box-sizing: border-box;
+      border: 1px solid rgba(36, 67, 92, .16);
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 8px 28px rgba(23, 27, 31, .06);
+    }
+
+    .staff-editor__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .staff-editor__title {
+      margin: 0;
+      font: 700 16px/1.2 "Space Grotesk", sans-serif;
+      color: var(--steel-dark, #1a3346);
+    }
+
+    .staff-editor__note {
+      margin: 5px 0 0;
+      color: var(--slate, #4b5760);
+      font: 400 12px/1.45 Inter, sans-serif;
+    }
+
+    .staff-editor__controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .staff-editor__button {
+      border: 1px solid #cbd1d5;
+      border-radius: 8px;
+      padding: 9px 12px;
+      background: #fff;
+      color: var(--ink, #171b1f);
+      cursor: pointer;
+      font: 600 12px/1.2 Inter, sans-serif;
+    }
+
+    .staff-editor__button:hover {
+      border-color: var(--steel, #24435c);
+    }
+
+    .staff-editor__button--primary {
+      background: var(--steel, #24435c);
+      border-color: var(--steel, #24435c);
+      color: #fff;
+    }
+
+    .staff-editor__button--danger {
+      border-color: #c88787;
+      color: #8a2222;
+    }
+
+    .staff-editor__message {
+      margin: 10px 0 0;
+      min-height: 18px;
+      font: 500 12px/1.45 Inter, sans-serif;
+      color: var(--slate, #4b5760);
+    }
+
+    /* ============================================================
+       HIDE THE CLIENT AUTH GATE
+       ============================================================ */
+
+    #auth-gate {
+      display: none !important;
+    }
+
+    @media (max-width: 640px) {
+      .staff-login__card {
+        padding: 24px 20px;
+      }
+
+      .staff-bar__inner {
+        width: min(100% - 18px, 1120px);
+      }
+
+      .staff-bar__status {
+        display: none;
+      }
+
+      .staff-editor {
+        width: min(100% - 18px, 1120px);
+      }
+
+      .staff-bar__identity {
+        overflow: hidden;
+      }
+
+      .staff-bar__identity > span:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ============================================================
-     DATABASE-READY LOGIN GATE
-     Email + Password only — no Facebook/Google/Mobile/
-     Sign-Up/Create-Account, and no Client login options. Submitting
-     this form calls AuthService.login(), which in production would
-     call a real backend (see AuthService comments in the script
-     below); here it is backed by an explicitly-labeled development
-     mock since no backend exists yet.
-     ============================================================ -->
-<div id="admin-login-gate" class="login-screen">
-  <div class="panel login-screen__panel">
-    <h1 class="login-screen__title">Luigi Lindell Construction</h1>
-    <p class="login-screen__subtitle">Admin</p>
-    <p class="hours-caption">This build authenticates through a development mock service (no backend is connected yet) — see the AuthService code comments for the real backend integration points.</p>
-    <form id="admin-login-form" novalidate>
-      <label class="field">Email<input type="email" id="login-username" autocomplete="username" required></label>
-      <label class="field">Password<input type="password" id="login-password" autocomplete="current-password" required></label>
-      <p class="auth-error" id="login-error" hidden></p>
-      <button type="submit" class="btn btn--primary full-width">Login</button>
-      <p class="login-screen__hint">
-        <button type="button" class="link-btn" id="btn-admin-forgot">Forgot your password?</button>
+  <!-- ============================================================
+       LOGIN
+       ============================================================ -->
+
+  <section id="staff-login" class="staff-login">
+    <div class="staff-login__card">
+      <p class="staff-login__eyebrow">Luigi Lindell Construction</p>
+      <h1 class="staff-login__title">Staff Portal</h1>
+      <p class="staff-login__sub">
+        Sign in with an authorized staff account.
       </p>
-    </form>
-  </div>
-</div>
 
-<!-- ============================================================
-     ADMIN PASSWORD RESET — RETURN SCREEN (Modification 7)
-     Shown only when the page loads with "#reset" in the URL, which
-     requestStaffPasswordReset()'s redirectTo appends. Mirrors the
-     Client site's own "#reset" + set-password pattern (js/bootstrap.js,
-     index.html) rather than inventing a second mechanism. Hidden the
-     rest of the time.
-     ============================================================ -->
-<div id="admin-reset-gate" class="login-screen" hidden>
-  <div class="panel login-screen__panel">
-    <h1 class="login-screen__title">Luigi Lindell Construction</h1>
-    <p class="login-screen__subtitle">Admin — Set a new password</p>
-    <form id="admin-set-password-form" novalidate>
-      <label class="field">New Password
-        <input type="password" id="admin-set-password" required minlength="8" autocomplete="new-password">
-      </label>
-      <label class="field">Confirm New Password
-        <input type="password" id="admin-set-password-confirm" required minlength="8" autocomplete="new-password">
-      </label>
-      <p class="auth-error" id="admin-set-password-error" hidden></p>
-      <button type="submit" class="btn btn--primary full-width">Save password</button>
-    </form>
-  </div>
-</div>
+      <form id="staff-login-form" novalidate>
+        <label class="staff-field">
+          <span>Email</span>
+          <input
+            id="staff-email"
+            type="email"
+            autocomplete="username"
+            required
+          >
+        </label>
 
-<!-- ============================================================
-     ADMIN APP SHELL — hidden until AuthService confirms an
-     authenticated session (see the init block at the bottom of the
-     script). This app is a completely separate application from the
-     Phase 9 Client and never talks to the Client HTML.
-     ============================================================ -->
-<div id="admin-app-shell" hidden>
+        <label class="staff-field">
+          <span>Password</span>
+          <input
+            id="staff-password"
+            type="password"
+            autocomplete="current-password"
+            required
+          >
+        </label>
 
-  <div class="top-bar">
-    <div class="top-bar__inner">
-      <div class="top-bar__brand">
-        <span class="top-bar__mark">Luigi Lindell Construction</span>
-        <span class="top-bar__meta">Admin Dashboard</span>
-      </div>
-      <div id="admin-auth-area" class="auth-area"></div>
+        <p id="staff-login-error" class="staff-login__error" hidden></p>
+
+        <button
+          id="staff-login-button"
+          class="staff-login__button"
+          type="submit"
+        >
+          Sign in
+        </button>
+      </form>
     </div>
-  </div>
+  </section>
 
-  <header class="cover">
-    <img id="admin-cover-photo" class="cover__photo" src="" alt="" />
-    <div class="cover__scrim"></div>
-  </header>
 
-  <div class="identity-band">
-    <div class="identity-top">
-      <div class="profile-photo">
-        <img id="admin-profile-photo" src="" alt="" />
+  <!-- ============================================================
+       AUTHORIZED STAFF AREA
+       ============================================================ -->
+
+  <div id="staff-area" hidden>
+
+    <header class="staff-bar">
+      <div class="staff-bar__inner">
+
+        <div class="staff-bar__identity">
+          <span id="staff-user-label">Staff</span>
+          <span id="staff-role-badge" class="staff-bar__badge">Staff</span>
+          <span class="staff-bar__status">Editing mode</span>
+        </div>
+
+        <div class="staff-bar__actions">
+          <button
+            id="staff-edit-toggle"
+            class="staff-bar__button staff-bar__button--edit"
+            type="button"
+          >
+            Edit
+          </button>
+
+          <button
+            id="staff-refresh"
+            class="staff-bar__button"
+            type="button"
+          >
+            Refresh
+          </button>
+
+          <button
+            id="staff-logout"
+            class="staff-bar__button"
+            type="button"
+          >
+            Log out
+          </button>
+        </div>
+
       </div>
+    </header>
+
+
+    <!--
+      This is intentionally a lightweight control layer for now.
+      The actual database mutations will be added after this shared
+      client rendering shell is confirmed working.
+    -->
+    <section id="staff-editor" class="staff-editor" hidden>
+      <div class="staff-editor__head">
+        <div>
+          <h2 class="staff-editor__title">Content editing</h2>
+          <p class="staff-editor__note">
+            You are viewing the same content and navigation used by clients.
+            Editing controls will operate on the same Supabase records.
+          </p>
+        </div>
+      </div>
+
+      <div class="staff-editor__controls">
+        <button
+          id="staff-add-content"
+          class="staff-editor__button staff-editor__button--primary"
+          type="button"
+        >
+          Add content
+        </button>
+
+        <button
+          id="staff-save"
+          class="staff-editor__button"
+          type="button"
+        >
+          Save changes
+        </button>
+
+        <button
+          id="staff-remove"
+          class="staff-editor__button staff-editor__button--danger"
+          type="button"
+        >
+          Remove
+        </button>
+      </div>
+
+      <p id="staff-editor-message" class="staff-editor__message"></p>
+    </section>
+
+
+    <!-- ==========================================================
+         SAME CLIENT DASHBOARD SHELL
+         ========================================================== -->
+
+    <div id="app-shell" hidden>
+
+      <header class="top-bar">
+        <div class="top-bar__inner">
+
+          <div class="top-bar__brand">
+            <div class="top-bar__mark">
+              Luigi Lindell Construction
+            </div>
+
+            <div class="top-bar__meta">
+              Calaca City, Batangas, Philippines
+            </div>
+          </div>
+
+          <div id="auth-area"></div>
+
+        </div>
+      </header>
+
+
+      <section class="cover">
+        <img
+          id="cover-photo"
+          class="cover__photo"
+          src=""
+          alt=""
+        >
+        <div class="cover__scrim"></div>
+      </section>
+
+
+      <section class="identity-band">
+        <div class="identity-band__inner">
+
+          <div class="profile-photo-wrap">
+            <img
+              id="profile-photo"
+              class="profile-photo"
+              src=""
+              alt=""
+            >
+          </div>
+
+          <div class="identity">
+            <h1 id="company-name"></h1>
+
+            <div class="company-description">
+              <p id="company-tagline"></p>
+              <button
+                id="btn-desc-toggle"
+                class="link-btn"
+                type="button"
+                hidden
+              >
+                See more
+              </button>
+            </div>
+
+            <div class="action-row">
+              <button
+                id="btn-message"
+                class="btn btn--primary"
+                type="button"
+              >
+                Message
+              </button>
+
+              <button
+                id="btn-call"
+                class="btn"
+                type="button"
+              >
+                Call
+              </button>
+
+              <button
+                id="btn-projects"
+                class="btn"
+                type="button"
+              >
+                Projects
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <main class="page">
+
+        <aside class="sidebar">
+          <nav aria-label="Company sections">
+            <ul id="nav-list"></ul>
+          </nav>
+        </aside>
+
+        <div class="page__content">
+
+          <div id="tab-strip" class="tab-strip"></div>
+
+          <section id="main-content"></section>
+
+        </div>
+
+      </main>
+
+
+      <footer class="footer">
+        <div class="footer__inner">
+          Luigi Lindell Construction
+        </div>
+      </footer>
+
     </div>
-    <h1 class="company-name">
-      <span id="admin-company-name"></span><span class="admin-role-badge">Admin</span>
-    </h1>
+
+
+    <!-- Existing client modals required by app.js -->
+
+    <div id="float-message" hidden></div>
+
+    <div id="video-modal" hidden>
+      <div id="video-modal-backdrop"></div>
+      <div id="video-modal-content"></div>
+    </div>
+
+    <div id="photo-modal" hidden>
+      <div id="photo-modal-backdrop"></div>
+      <div id="photo-modal-content"></div>
+    </div>
+
+    <div id="chat-modal" hidden>
+      <div id="chat-modal-backdrop"></div>
+      <div id="chat-modal-content"></div>
+    </div>
+
   </div>
 
-  <div class="page">
-    <nav class="sidebar" aria-label="Admin sections">
-      <p class="sidebar__heading">Admin sections</p>
-      <ul id="admin-nav-list" class="nav-list"></ul>
-    </nav>
 
-    <div id="admin-tab-strip" class="tab-strip" aria-label="Admin sections"></div>
+  <!-- ============================================================
+       SUPABASE + EXISTING CLIENT DATA/RENDERING ENGINE
+       ============================================================ -->
 
-    <main id="admin-main-content" class="main-content" aria-live="polite"></main>
-  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 
-  <footer class="site-footer">
-    Luigi Lindell Construction — Admin · Calaca City, Batangas, Philippines
-  </footer>
+  <script src="supabase-client.js"></script>
+  <script src="escape-html.js"></script>
+  <script src="media-pipeline.js"></script>
+  <script src="db-service.js"></script>
 
-</div><!-- /#admin-app-shell -->
 
-<div id="admin-toast" class="toast" role="status"></div>
+  <!-- ============================================================
+       STAFF AUTH
+       ============================================================ -->
 
-<!-- Supabase client library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script>
+    (function () {
+      "use strict";
 
-<!-- Shared helpers (same files the Client site uses) -->
-<script src="js/supabase-client.js"></script>
-<script src="js/escape-html.js"></script>
-<script src="js/signed-urls.js"></script>
-<script src="js/media-pipeline.js"></script>
+      var sb = window.LLCSupabase;
 
-<!-- Admin backend: apiAdapter + all load/persist replacements.
-     MUST load before admin.js, which reads window.LLCAdminBackend. -->
-<script src="js/admin-supabase.js"></script>
-<script src="js/admin.js"></script>
+      if (!sb || !sb.client) {
+        console.error("Supabase client was not loaded.");
+        return;
+      }
+
+      var client = sb.client;
+
+      var staffLogin = document.getElementById("staff-login");
+      var staffArea = document.getElementById("staff-area");
+      var staffForm = document.getElementById("staff-login-form");
+      var staffEmail = document.getElementById("staff-email");
+      var staffPassword = document.getElementById("staff-password");
+      var staffLoginButton = document.getElementById("staff-login-button");
+      var staffLoginError = document.getElementById("staff-login-error");
+
+      var staffUserLabel = document.getElementById("staff-user-label");
+      var staffRoleBadge = document.getElementById("staff-role-badge");
+
+      var staffEditor = document.getElementById("staff-editor");
+      var staffEditorMessage = document.getElementById("staff-editor-message");
+
+      var currentStaff = null;
+
+
+      function setLoginError(message) {
+        if (!message) {
+          staffLoginError.hidden = true;
+          staffLoginError.textContent = "";
+          return;
+        }
+
+        staffLoginError.hidden = false;
+        staffLoginError.textContent = message;
+      }
+
+
+      function setEditorMessage(message) {
+        staffEditorMessage.textContent = message || "";
+      }
+
+
+      function roleLabel(role) {
+        if (role === "admin") return "Administrator";
+        if (role === "uploader") return "Uploader";
+        if (role === "followup-operator") return "Follow-up";
+        if (role === "design-operator") return "Design";
+        return "Staff";
+      }
+
+
+      /*
+       * Database-authoritative staff authorization.
+       *
+       * current_staff_role() is the same function already used by the
+       * working Staff Portal. The browser never decides whether someone
+       * is staff merely from their email address.
+       */
+      async function getStaffRole() {
+        var result = await client.rpc("current_staff_role");
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        return result.data || null;
+      }
+
+
+      async function loadStaffSession() {
+        var sessionResult = await client.auth.getSession();
+
+        if (sessionResult.error) {
+          throw sessionResult.error;
+        }
+
+        var session =
+          sessionResult.data &&
+          sessionResult.data.session
+            ? sessionResult.data.session
+            : null;
+
+        if (!session || !session.user) {
+          showLogin();
+          return;
+        }
+
+        var role = await getStaffRole();
+
+        if (!role) {
+          await client.auth.signOut();
+          showLogin();
+          setLoginError(
+            "This account is not authorized for the staff portal."
+          );
+          return;
+        }
+
+        currentStaff = {
+          id: session.user.id,
+          email: session.user.email || "",
+          role: role
+        };
+
+        showStaff();
+      }
+
+
+      async function loadClientDashboard() {
+        /*
+         * db-service.js creates SITE_DATA in the exact structure expected
+         * by app.js. We deliberately wait for the staff session first.
+         */
+        await window.LLCDataService.load();
+
+        /*
+         * app.js captures window.SITE_DATA when it is parsed, so it must
+         * be injected only AFTER the data has been loaded.
+         */
+        await new Promise(function (resolve, reject) {
+          var script = document.createElement("script");
+
+          script.src = "app.js";
+
+          script.onload = resolve;
+          script.onerror = function () {
+            reject(
+              new Error("The client dashboard renderer could not be loaded.")
+            );
+          };
+
+          document.body.appendChild(script);
+        });
+
+        if (
+          window.LLCApp &&
+          typeof window.LLCApp.showApp === "function"
+        ) {
+          window.LLCApp.showApp();
+        } else {
+          throw new Error("Client dashboard renderer did not initialize.");
+        }
+      }
+
+
+      function showLogin() {
+        staffArea.hidden = true;
+        staffLogin.hidden = false;
+        currentStaff = null;
+      }
+
+
+      async function showStaff() {
+        staffLogin.hidden = true;
+        staffArea.hidden = false;
+
+        staffUserLabel.textContent =
+          currentStaff.email || "Staff";
+
+        staffRoleBadge.textContent =
+          roleLabel(currentStaff.role);
+
+        staffEditor.hidden = false;
+
+        setEditorMessage(
+          "Loading the shared client dashboard…"
+        );
+
+        try {
+          await loadClientDashboard();
+
+          setEditorMessage(
+            "Shared client dashboard loaded. Editing controls are ready for the next phase."
+          );
+        } catch (error) {
+          console.error(error);
+
+          setEditorMessage(
+            "The staff session is valid, but the dashboard could not be loaded."
+          );
+        }
+      }
+
+
+      staffForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        setLoginError("");
+
+        var email = staffEmail.value.trim();
+        var password = staffPassword.value;
+
+        if (!email || !password) {
+          setLoginError("Enter your email and password.");
+          return;
+        }
+
+        staffLoginButton.disabled = true;
+        staffLoginButton.textContent = "Signing in…";
+
+        try {
+          var result = await client.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+          if (result.error) {
+            throw result.error;
+          }
+
+          var role = await getStaffRole();
+
+          if (!role) {
+            await client.auth.signOut();
+            throw new Error(
+              "This account is not authorized for the staff portal."
+            );
+          }
+
+          currentStaff = {
+            id: result.data.user.id,
+            email: result.data.user.email || email,
+            role: role
+          };
+
+          await showStaff();
+
+        } catch (error) {
+          console.error(error);
+
+          setLoginError(
+            error && error.message
+              ? error.message
+              : "Sign-in failed. Please try again."
+          );
+
+        } finally {
+          staffLoginButton.disabled = false;
+          staffLoginButton.textContent = "Sign in";
+        }
+      });
+
+
+      document
+        .getElementById("staff-logout")
+        .addEventListener("click", async function () {
+          await client.auth.signOut();
+          window.location.reload();
+        });
+
+
+      document
+        .getElementById("staff-refresh")
+        .addEventListener("click", function () {
+          window.location.reload();
+        });
+
+
+      document
+        .getElementById("staff-edit-toggle")
+        .addEventListener("click", function () {
+          var hidden = staffEditor.hidden;
+          staffEditor.hidden = !hidden;
+
+          setEditorMessage(
+            staffEditor.hidden
+              ? ""
+              : "Editing controls are visible."
+          );
+        });
+
+
+      document
+        .getElementById("staff-add-content")
+        .addEventListener("click", function () {
+          setEditorMessage(
+            "Add-content controls will be connected to the Supabase gallery records next."
+          );
+        });
+
+
+      document
+        .getElementById("staff-save")
+        .addEventListener("click", function () {
+          setEditorMessage(
+            "Save is reserved for the database editing phase so no client data can be accidentally overwritten."
+          );
+        });
+
+
+      document
+        .getElementById("staff-remove")
+        .addEventListener("click", function () {
+          setEditorMessage(
+            "Remove is reserved for the database editing phase so deletion is performed against the correct record and storage object."
+          );
+        });
+
+
+      client.auth.onAuthStateChange(function (event) {
+        if (event === "SIGNED_OUT") {
+          showLogin();
+        }
+      });
+
+
+      loadStaffSession().catch(function (error) {
+        console.error(error);
+        showLogin();
+
+        setLoginError(
+          "We couldn't load the staff session. Please refresh and try again."
+        );
+      });
+
+    })();
+  </script>
+
 </body>
 </html>
